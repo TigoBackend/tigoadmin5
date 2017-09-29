@@ -486,9 +486,17 @@ class App
         } else {
             $path = APP_PATH . $module;
             // 加载模块配置
-            $config = Config::load(CONF_PATH . $module . 'config' . CONF_EXT);
+            if (defined('APP_FORMAL_ENVIRONMENT') && APP_FORMAL_ENVIRONMENT){
+                $config = Config::load(CONF_PATH . $module . 'config' . CONF_EXT);
+            }else{
+                $config = Config::load(CONF_PATH . $module . 'config_dev' . CONF_EXT);
+            }
             // 读取数据库配置文件
-            $filename = CONF_PATH . $module . 'database' . CONF_EXT;
+            if (defined('APP_FORMAL_ENVIRONMENT') && APP_FORMAL_ENVIRONMENT){
+                $filename = CONF_PATH . $module . 'database' . CONF_EXT;
+            }else{
+                $filename = CONF_PATH . $module . 'database_dev' . CONF_EXT;
+            }
             Config::load($filename, 'database');
             // 读取扩展配置文件
             if (is_dir(CONF_PATH . $module . 'extra')) {

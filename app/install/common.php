@@ -189,6 +189,7 @@ function sp_create_db_config($config)
                 mkdir($confDir, 0777, true);
             }
             file_put_contents(CMF_ROOT . 'data/conf/database.php', $conf);
+            file_put_contents(CMF_ROOT . 'data/conf/database_dev.php', $conf);
         } catch (\Exception $e) {
 
             return false;

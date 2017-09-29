@@ -34,8 +34,19 @@ define('VENDOR_PATH', __DIR__ . '/../../simplewind/vendor/');
 // 定义应用的运行时目录
 define('RUNTIME_PATH',__DIR__.'/../../data/runtime/api/');
 
+
+
+/*---------------------------------------------------------------天高常量start-----------------------------------------------*/
+define('UPLOAD_PATH',__DIR__.'/../upload/');    /*定义文件上传目录*/
+define("CHECK_REQUEST_METHOD_THROW","THROW");   /*校验访问方式异常处理方式抛出异常*/
+define("CHECK_REQUEST_METHOD_RETURN","RETURN");     /*校验访问方式异常处理方式return bool*/
+/*-----------------------------------------------------------------------业务常量start-----------------------------------------------------------------------*/
+define('CACHE_PREFIX_VERIFY_CODE','verify_code');   /*验证码缓存文件前缀*/
+define('IMAGE_TYPE_HEADER',1);                      /*图片类型头像*/
+
+/*---------------------------------------------------------------天高常量end-----------------------------------------------*/
+
 // 加载框架基础文件
 require __DIR__ . '/../../simplewind/thinkphp/base.php';
-
 // 执行应用
 \think\App::run()->send();

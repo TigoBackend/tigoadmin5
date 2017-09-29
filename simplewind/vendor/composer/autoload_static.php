@@ -24,6 +24,10 @@ class ComposerStaticInit929fb365b9981d29459d58f676689cf7
         array (
             'mindplay\\annotations\\' => 21,
         ),
+        'W' => 
+        array (
+            'Waters\\WebChatApi\\' => 18,
+        ),
         'Q' => 
         array (
             'Qiniu\\' => 6,
@@ -54,6 +58,10 @@ class ComposerStaticInit929fb365b9981d29459d58f676689cf7
         'mindplay\\annotations\\' => 
         array (
             0 => __DIR__ . '/..' . '/mindplay/annotations/src/annotations',
+        ),
+        'Waters\\WebChatApi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/waters/webchatapi/src',
         ),
         'Qiniu\\' => 
         array (

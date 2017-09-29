@@ -1,0 +1,9 @@
+# WxApi(web chat api library)
+
+自定义微信公众号开发api类库
+
+使用composer加入依赖即可直接使用,使用前不需要使用代码require即可使用
+在某些第三方框架如ThinkPHP中有专门提供加载vendor资料库的函数则不能使用直接require vendor/autoload.php来自动加载类库,
+因为这种第三方的框架虽然有使用composer但是其初始化了一些另外的跟composer重复的类库域名可能会与composer的命名空间冲突.
+所以本库里提供了index.php作为独立的类库加载脚本在使用ThinkPHP等框架时可使用如vendor('waters.webchatapi.index')的方式
+来实现类库的自动加载

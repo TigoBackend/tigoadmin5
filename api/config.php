@@ -257,4 +257,48 @@ return [
     'cmf_default_theme'       => 'simpleboot3',
     'cmf_admin_theme_path'    => 'themes/admin/',
     'cmf_admin_default_theme' => 'simpleboot3',
+
+    // +----------------------------------------------------------------------
+    // | 天高 设置
+    // +----------------------------------------------------------------------
+
+    'common'=>[
+        'path_upload'=>UPLOAD_PATH,/*上传文件文件夹本地根目录绝对路径*/
+        'path_upload_tmp' => UPLOAD_PATH.'tmp/',    /*临时文件目录绝对路径*/
+        'path_header'=>UPLOAD_PATH.'header/',       /*头像目录绝对路径*/
+        'folder_upload_tmp'=>'tmp/',             /*临时文件目录名*/
+        'folder_upload_header'=>'header/',       /*头像目录名*/
+        'main_domain'=>'http://tigonetwork.com/' /*项目域名*/
+    ],
+
+
+    'wx_config'=>[
+        'app_id'=>'',     /*app_id*/
+        'app_secret'=>'',
+        'mch_id'=>'',     /*商户号*/
+        'key'=>'',  /*api密钥*/
+        'token'=>'',      /*微信时间推送回调地址校验用token*/
+        'encodingaeskey'=>'',
+        'notify_url'=>"",
+    ],
+
+    'sms_config'=>[
+        /*新版本配置*/
+        'access_key_id'=>'',
+        'access_key_secret'=>'',
+        'sign_name'=>'',
+
+        /*旧版本配置*/
+        'app_key'=>'',
+        'app_secret'=>'',
+        'free_sign_name'=>'',
+    ],
+
+    'qn_config'=>[
+        'access_key'=>'',   /*七牛云存储access_key*/
+        'secret_key'=>'',   /*七牛云存储secret_key*/
+        'bucket'=>'',       /*七牛云存储bucket(图片容器)*/
+        "domain"=>'',       /*七牛bucket对应的域名*/
+    ]
+
 ];
