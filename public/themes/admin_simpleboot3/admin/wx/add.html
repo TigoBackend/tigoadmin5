@@ -1,0 +1,116 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('Admin/Wx/index')}">菜单列表</a></li>
+        <li class="active"><a href="javascript:;" target="_self" >新增菜单</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20" id="add_form">
+        <input type="hidden" id="parent_id" name="parent_id" value="{$parent_id}"  />
+        <table class="table table-bordered">
+            <tr>
+                <th width="100">菜单名:</th>
+                <td>
+                    <input type="text" name="name" id="name" value="" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th width="100">菜单排序:</th>
+                <td>
+                    <input type="number" name="list_order" id="list_order" value="50" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th width="100">菜单类型:</th>
+                <td>
+                    <select name="type" id="type" class="form-control" >
+                        <php>if(!$parent_id){</php><option value="">一级菜单</option><php>}</php>
+                        <option value="view">外链</option>
+                        <php>if(!$parent_id){</php><option value="text">文本</option><php>}</php>
+                    </select>
+                </td>
+            </tr>
+            <php>if(!$parent_id){</php><tr id="showView" style="display: none"><php>}else{</php><tr id="showView"><php>}</php>
+            <th width="100">网页地址:</th>
+            <td>
+                <input type="text" name="content_value_view" id="content_value_view" value="" class="form-control" />
+            </td>
+        </tr>
+            <tr id="showText" style="display: none">
+                <th width="100">文本内容:</th>
+                <td>
+                    <textarea id="content_value_text" rows="8" style="width: 380px" class="form-control"></textarea>
+                </td>
+            </tr>
+        </table>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary js-ajax-submit" onclick="add_post();return false;">{:lang('ADD')}</button>
+                <a class="btn btn-default" href="{:url('Wx/index')}">{:lang('BACK')}</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+<script>
+
+    function add_post() {
+        var params = {};
+        params.parent_id = $('#parent_id').val();
+        params.name = $('#name').val();
+        params.list_order = $('#list_order').val();
+        params.type = $('#type').val();
+        switch (params.type){
+            case 'text':
+                params.content_value = $('#content_value_text').val();
+                if(!params.content_value){
+                    layerMsg('请填写文本内容');
+                    return;
+                }
+                break;
+            case 'view':
+                params.content_value = $('#content_value_view').val();
+                if(!params.content_value){
+                    layerMsg('请填写网页地址');
+                    return;
+                }
+                break;
+            default:
+        }
+        if(!params.name){
+            layerMsg('请填写菜单名');
+            return;
+        }
+        console.log(params);
+        $.post("{:url('Wx/add_post')}",params,function (data) {
+            layerMsg(data.msg);
+            location.href="{:url('Admin/Wx/index')}";
+        });
+    }
+
+    $(function () {
+
+        $('#type').on('change',function (e) {
+            var type = $('#type').val();
+            console.log(type);
+            switch (type){
+                case 'text':
+                    $('#showView').hide();
+                    $('#showText').show();
+                    break;
+                case 'view':
+                    $('#showView').show();
+                    $('#showText').hide();
+                    break;
+                default:
+                    $('#showView').hide();
+                    $('#showText').hide();
+                    break;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

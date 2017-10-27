@@ -193,13 +193,13 @@ function check_params($params,$keys = null,$exception_type = 1,$handle_type="THR
         $result = false;
     } else if(!empty($keys) && is_array($keys)){
         foreach ($keys as $key){
-            if(empty($params[$key])){
+            if(!isset($params[$key]) || empty($params[$key])){
                 $result = false;
                 break;
             }
         }
     }else if(!empty($keys)){
-        if(empty($params[$keys])) $result = false;
+        if(!isset($params[$keys]) || empty($params[$keys])) $result = false;
     }
     /*根据处理方法执行操作*/
     if(empty($result)){

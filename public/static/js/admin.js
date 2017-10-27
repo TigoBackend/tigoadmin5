@@ -934,3 +934,16 @@ function openIframeLayer(url, title, options) {
     });
 
 }
+
+
+/**
+ * 弹框提示
+ * @param msg
+ * @param n
+ */
+function layerMsg(msg,n) {
+    Wind.css('layer');
+    Wind.use("layer",function () {
+        layer.msg(msg,n);
+    });
+}

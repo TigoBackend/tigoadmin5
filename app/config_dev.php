@@ -226,5 +226,16 @@ $configs = [
     'cmf_default_theme'       => 'simpleboot3',
     'cmf_admin_theme_path'    => 'themes/',
     'cmf_admin_default_theme' => 'admin_simpleboot3',
+
+
+    'wx_config'=>[
+        'app_id' => '',     /*app_id*/
+        'app_secret' => '',
+        'mch_id' => '',     /*商户号*/
+        'key' => '',  /*api密钥*/
+        'token' => '',      /*微信时间推送回调地址校验用token*/
+        'encodingaeskey' => '',
+        'notify_url' => "",
+    ],
 ];
 return array_merge($configs, $runtimeConfig);

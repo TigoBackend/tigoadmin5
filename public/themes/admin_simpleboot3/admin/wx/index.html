@@ -1,0 +1,81 @@
+<include file="public@header" />
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">菜单列表</a></li>
+        <li><a href="jsvascript:;" onclick="publish();">发布菜单</a></li>
+        <li><a href="{:url('Wx/sync')}" class="js-ajax-dialog-btn" data-msg="您确定将公众号菜单同步到本地吗?">从微信拉取</a></li>
+        <php>if(count($menus) < 3){</php>
+        <li><a href="{:url('Wx/add',array('wm_parent_id'=>0))}" target="_self">新增根菜单</a></li>
+        <php>}</php>
+    </ul>
+    <table class="table table-hover table-bordered margin-top-20">
+        <thead>
+        <tr>
+            <th>菜单名</th>
+            <th>菜单排序</th>
+            <th>菜单类型</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <foreach name="menus" item="vo">
+            <tr>
+                <td style="display: none">{$vo.id}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.list_order}</td>
+                <td>
+                    <if condition="$vo['content_type'] eq 'view'">视图</if>
+                    <if condition="$vo['content_type'] eq 'text'">文本</if>
+                </td>
+                <td>
+                    <if condition="$vo['content_type'] eq ''">
+                        <a class="btn btn-primary" href="{:url('Admin/Wx/add',array('parent_id'=>$vo['id']))}">新增子菜单</a>&nbsp;
+                    </if>
+                    <a class="btn btn-primary" href="{:url('Admin/Wx/edit',array('id'=>$vo['id']))}">编辑</a>&nbsp;
+                    <a class="btn btn-danger js-ajax-delete" data-msg="确定要删除一级菜单吗?删除后下级也会一起清除"
+                       href="{:url('Admin/Wx/drop',array('id'=>$vo['id']))}">删除</a>
+                </td>
+            </tr>
+            <if condition="$vo['childNum'] gt 0">
+                <foreach name="vo['child']" item="vo2">
+                    <tr>
+                        <td style="display: none">{$vo2.id}</td>
+                        <td style="padding-left: 30px">{$vo2.name}</td>
+                        <td>{$vo2.list_order}</td>
+                        <td>
+                            <if condition="$vo2['content_type'] eq 'view'">视图</if>
+                            <if condition="$vo2['content_type'] eq 'text'">文本</if>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="{:url('Admin/Wx/edit',array('id'=>$vo2['id']))}">编辑</a>&nbsp;
+                            <a class="btn btn-danger js-ajax-delete" data-msg="确定要删除菜单吗?"
+                               href="{:url('Admin/Wx/drop',array('id'=>$vo2['id']))}">删除</a>
+                        </td>
+                    </tr>
+                </foreach>
+            </if>
+        </foreach>
+        </tbody>
+    </table>
+
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script>
+    function publish() {
+        $.post("{:url('Admin/Wx/publish')}", {}, function (data) {
+            switch (data.code){
+                case 1:
+                    layerMsg(data.msg);
+                    location.reload();
+                    break;
+                default:
+                    layerMsg(data.msg);
+                    break;
+            }
+        });
+    }
+</script>
+</body>
+</html>
