@@ -80,7 +80,7 @@ class Redis extends Driver
     public function get($name, $default = false)
     {
         $value = $this->handler->get($this->getCacheKey($name));
-        if (is_null($value)) {
+        if (empty($value)) {
             return $default;
         }
         $jsonData = json_decode($value, true);
@@ -98,7 +98,7 @@ class Redis extends Driver
      */
     public function set($name, $value, $expire = null)
     {
-        if (is_null($expire)) {
+        if (empty($expire)) {
             $expire = $this->options['expire'];
         }
         if ($expire instanceof \DateTime) {
@@ -146,7 +146,7 @@ class Redis extends Driver
     }
 
     /**
-     * 删除缓存
+     * 删除单个缓存
      * @access public
      * @param string $name 缓存变量名
      * @return boolean
@@ -175,5 +175,111 @@ class Redis extends Driver
         }
         return $this->handler->flushDB();
     }
+
+
+    /**
+     * 获取实际的缓存标识
+     * @access public
+     * @param string $name 缓存名
+     * @return string
+     */
+    protected function getCacheKey($name)
+    {
+        if (!empty($this->options['prefix']) && strpos($name,$this->options['prefix']) === 0)return $name;
+        return $this->options['prefix'] . $name;
+    }
+
+
+    /**
+     * 查找符合pattern模式给定的key列表
+     * @param string $pattern
+     * @return array
+     */
+    public function keys($pattern = '*'){
+        $pattern = empty($pattern)? '*':(string)$pattern;
+        $pattern = $this->getCacheKey($pattern);
+        return $this->handler->keys($pattern);
+    }
+
+
+    /**
+     * 移除指定key的缓存
+     * @param string|array $keys
+     * @return int
+     * @throws \RedisException
+     */
+    public function del($keys){
+        if (!is_string($keys) && !is_array($keys)) throw new \RedisException('key must be string or array');
+        if (is_array($keys)){
+            foreach ($keys as $k => $key){
+                $keys[$k] = $this->getCacheKey($key);
+            }
+        }
+        return $this->handler->del($keys);
+    }
+
+    /**
+     * 删除符合pattern模式的key的缓存,注意pattern不传或传入*表示移除所有缓存
+     * @param string $pattern
+     * @return int
+     * @throws \RedisException
+     */
+    public function del_pattern($pattern = '*'){
+        $keys = $this->keys($pattern);
+        return $this->del($keys);
+    }
+
+
+    /**
+     * 根据索引切换当前redis数据库
+     * @param null $index
+     * @return bool
+     */
+    public function select($index=null){
+        $index = empty(intval($index))?0:intval($index);
+        return $this->handler->select($index);
+    }
+
+
+    /**
+     * 将指定key的数据移到指定索引的数据库中
+     * @param $key
+     * @param $db_index
+     * @return bool
+     */
+    public function move($key,$db_index){
+        return $this->handler->move($this->getCacheKey($key),$db_index);
+    }
+
+
+    /**
+     * 获取指定数组中的key对应的缓存(批量获取缓存)
+     * @param array $keys
+     * @return array
+     */
+    public function mget(array $keys){
+        foreach ($keys as $k => $key){
+            $keys[$k] = $this->getCacheKey($key);
+        }
+        return $this->handler->mget($keys);
+    }
+
+
+    /**
+     * 批量添加缓存
+     * @param array $datas
+     * @return bool
+     */
+    public function mset(array $datas){
+        $result = [];
+        foreach ($datas as $key => $value){
+            $result[$this->getCacheKey($key)] = $value;
+        }
+        return $this->handler->mset($result);
+    }
+    
+    
+
+
 
 }

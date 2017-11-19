@@ -43,5 +43,20 @@ return [
     'qn/water_img'=>'entry/Qn/water_img',
     'qn/water_text'=>'entry/Qn/water_text',
 
-
+    /*redis实例*/
+    'redis/test'=>'entry/Redis/check',
+    'redis/set'=>'entry/Redis/set',
+    'redis/get'=>'entry/Redis/get',
+    'redis/has'=>'entry/Redis/has',
+    'redis/inc'=>'entry/Redis/inc',
+    'redis/dec'=>'entry/Redis/dec',
+    'redis/rm'=>'entry/Redis/rm',
+    'redis/clear'=>'entry/Redis/clear',
+    'redis/keys'=>'entry/Redis/keys',
+    'redis/del'=>'entry/Redis/del',
+    'redis/del_pattern'=>'entry/Redis/del_pattern',
+    'redis/select'=>'entry/Redis/select',
+    'redis/move'=>'entry/Redis/move',
+    'redis/mget'=>'entry/Redis/mget',
+    'redis/mset'=>'entry/Redis/mset',
 ];
