@@ -279,7 +279,66 @@ class Redis extends Driver
         }
         return $this->handler->mset($result);
     }
-    
+
+
+    /*---------------------------------------hash start-----------------------------------------*/
+
+    /**
+     * 批量保存哈希对象属性
+     * @param $key
+     * @param array $obj
+     * @return bool
+     */
+    public function hash_multi_set($key,array $obj){
+        return $this->handler->hMset($key,$obj);
+    }
+
+
+    /**
+     * 保存单个属性到哈希对象
+     * @param $key
+     * @param $hash_key
+     * @param $value
+     * @return int
+     */
+    public function hash_set($key,$hash_key,$value){
+        return $this->handler->hSet($key,$hash_key,$value);
+    }
+
+
+    /**
+     *获取整个哈希对象
+     * @param $key
+     * @return array
+     */
+    public function hash_get_all($key){
+        return $this->handler->hGetAll($key);
+    }
+
+
+    /**
+     * 获取单个哈希对象属性
+     * @param $key
+     * @param $hash_key
+     * @return string
+     */
+    public function hash_get($key,$hash_key){
+        return $this->handler->hGet($key,$hash_key);
+    }
+
+    /**
+     * 获取多个指定哈希对象属性
+     * @param $key
+     * @param array $hash_keys
+     * @return array
+     */
+    public function hash_multi_get($key,array $hash_keys){
+        return $this->handler->hMGet($key,$hash_keys);
+    }
+
+
+    /*---------------------------------------hash end-----------------------------------------*/
+
     
 
 

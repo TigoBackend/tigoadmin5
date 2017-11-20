@@ -327,16 +327,37 @@ class RedisController extends BaseController
 //            $rs = $redis->keys();
 //            dump($rs);
             
-            $rs = WatersCache::get('name','nothing');
-            dump($rs);
-            $rs = WatersCache::set('name','check now',5);
-            dump($rs);
-            $rs = WatersCache::get('name','nothing');
-            dump($rs);
-            $rs = WatersCache::rm('name');
-            dump($rs);
-            $rs = WatersCache::get('name','nothing');
-            dump($rs);
+//            $rs = WatersCache::get('name','nothing');
+//            dump($rs);
+//            $rs = WatersCache::set('name','check now',5);
+//            dump($rs);
+//            $rs = WatersCache::get('name','nothing');
+//            dump($rs);
+//            $rs = WatersCache::rm('name');
+//            dump($rs);
+//            $rs = WatersCache::get('name','nothing');
+//            dump($rs);
+//            $rs = WatersCache::hash_get_all('hm');
+//            dump($rs);
+//            $rs = WatersCache::hash_multi_set('Waters',['name'=>'Waters Fong','age'=>35,'sex'=>'male','job'=>'coder']);
+//            dump($rs);
+//            $rs = WatersCache::hash_set('Waters','lover','nan');
+//            dump($rs);
+//            $rs = WatersCache::hash_get_all('Waters');
+//            dump($rs);
+//            $rs = WatersCache::hash_get('Waters','lover');
+//            dump($rs);
+//            $rs = WatersCache::hash_multi_get('Waters',['name','lover']);
+//            dump($rs);
+
+//            $redis = new \Redis();
+//            $redis->connect('127.0.0.1');
+//            $rs = $redis->hMset('hm',['name'=>'Waters Fong','age'=>35,'sex'=>'male','job'=>'coder']);
+//            dump($rs);
+//            $rs = $redis->hGetAll('hm');
+//            dump($rs);
+//            $rs = $redis->hGet('hm','age');
+//            dump($rs);
             $this->success('check',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());

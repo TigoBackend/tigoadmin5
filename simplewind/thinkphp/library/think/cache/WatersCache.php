@@ -328,8 +328,105 @@ final class WatersCache
 
 
 
+
+
     /*-------------------------------------综合缓存(自动切换redis/file两种缓存模式)工具函数end-----------------------------------------*/
 
+
+    /*-----------------------------------------hash start-----------------------------------------*/
+
+
+    /**
+     * 批量保存哈希对象属性
+     * @param $key
+     * @param array $obj
+     * @return mixed
+     */
+    public static function hash_multi_set($key,array $obj){
+        try{
+            $option = [];
+            return self::init_redis($option,true)->hash_multi_set($key,$obj);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+
+    /**
+     * 保存单个属性到哈希对象
+     * @param $key
+     * @param $hash_key
+     * @param $value
+     * @return mixed
+     */
+    public static function hash_set($key,$hash_key,$value){
+        try{
+            $option = [];
+            return self::init_redis($option,true)->hash_set($key,$hash_key,$value);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+
+    /**
+     * 获取整个哈希对象
+     * @param $key
+     * @return mixed
+     */
+    public static function hash_get_all($key){
+        try{
+            $option = [];
+            return self::init_redis($option,true)->hash_get_all($key);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+
+    /**
+     * 获取单个哈希对象属性
+     * @param $key
+     * @param $hash_key
+     * @return mixed
+     */
+    public static function hash_get($key,$hash_key){
+        try{
+            $option = [];
+            return self::init_redis($option,true)->hash_get($key,$hash_key);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+
+    /**
+     * 获取多个指定哈希对象属性
+     * @param $key
+     * @param array $hash_keys
+     * @return bool
+     */
+    public static function hash_multi_get($key,array $hash_keys){
+        try{
+            $option = [];
+            return self::init_redis($option,true)->hash_multi_get($key,$hash_keys);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+
+    /*-----------------------------------------hash end-----------------------------------*/
 
 
     /*----------------------------------------文本缓存工具函数start-----------------------------------------*/
