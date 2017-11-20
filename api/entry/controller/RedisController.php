@@ -11,6 +11,7 @@ namespace api\entry\controller;
 
 use api\common\controller\BaseController;
 use think\Cache;
+use think\cache\WatersCache;
 use think\exception\ErrorException;
 
 class RedisController extends BaseController
@@ -23,29 +24,9 @@ class RedisController extends BaseController
         try{
             $key = input('key','');
             $value = input('value','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option,true);
-            $rs = $redis->set($key,$value);
-
+            $expire = input('expire',0);
+            $prefix = input('prefix','');
+            $rs = WatersCache::set($key,$value,$expire,$prefix);
             $this->success('set',json_encode($rs));
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -61,28 +42,8 @@ class RedisController extends BaseController
     public function get(){
         try{
             $key = input('key','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->get($key,'nothing');
+            $prefix = input('prefix','');
+            $rs = WatersCache::get($key,'nothing',$prefix);
             $this->success('get',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -97,28 +58,8 @@ class RedisController extends BaseController
     public function has(){
         try{
             $key = input('key','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->has($key);
+            $prefix = input('prefix','');
+            $rs = WatersCache::has($key,$prefix);
             $this->success('has',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -133,29 +74,9 @@ class RedisController extends BaseController
     public function inc(){
         try{
             $key = input('key','');
-            $step = input('step','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->inc($key,$step);
+            $step = input('step',1);
+            $prefix = input('prefix','');
+            $rs = WatersCache::inc($key,$step,$prefix);
             $this->success('inc',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -170,29 +91,9 @@ class RedisController extends BaseController
     public function dec(){
         try{
             $key = input('key','');
-            $step = input('step','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->dec($key,$step);
+            $step = input('step',1);
+            $prefix = input('prefix','');
+            $rs = WatersCache::dec($key,$step,$prefix);
             $this->success('dec',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -207,28 +108,8 @@ class RedisController extends BaseController
     public function rm(){
         try{
             $key = input('key','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->rm($key);
+            $prefix = input('prefix','');
+            $rs = WatersCache::rm($key,$prefix);
             $this->success('rm',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -243,28 +124,8 @@ class RedisController extends BaseController
      */
     public function clear(){
         try{
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->clear();
+            $prefix = input('prefix','');
+            $rs = WatersCache::clear(null,$prefix);
             $this->success('clear',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -279,28 +140,7 @@ class RedisController extends BaseController
     public function keys(){
         try{
             $pattern = input('pattern','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->keys($pattern);
+            $rs = WatersCache::keys($pattern);
             $this->success('keys',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -315,28 +155,8 @@ class RedisController extends BaseController
     public function del(){
         try{
             $keys = input('keys','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->del($keys);
+            $prefix = input('prefix','');
+            $rs = WatersCache::del($keys,$prefix);
             $this->success('del',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -352,28 +172,7 @@ class RedisController extends BaseController
     public function del_pattern(){
         try{
             $pattern = input('pattern','');
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->del_pattern($pattern);
+            $rs = WatersCache::del_pattern($pattern);
             $this->success('del_pattern',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -389,28 +188,7 @@ class RedisController extends BaseController
     public function select(){
         try{
             $index = input('index',0);
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->select($index);
+            $rs = WatersCache::select($index);
             $this->success('index',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -427,28 +205,8 @@ class RedisController extends BaseController
         try{
             $key = input('key',0);
             $db_index = input('db_index',0);
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->move($key,$db_index);
+            $prefix = input('prefix','');
+            $rs = WatersCache::move($key,$db_index,$prefix);
             $this->success('move',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -465,28 +223,7 @@ class RedisController extends BaseController
         try{
             $keys = input('keys','');
             $keys = explode(',',$keys);
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->mget($keys);
+            $rs = WatersCache::mget($keys);
             $this->success('move',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -506,28 +243,8 @@ class RedisController extends BaseController
                 'ddd'=>'222',
                 'eee'=>'444',
             ];
-            $option = [
-                /*redis服务主机ip*/
-                'host'=>'127.0.0.1',
-                /*redis服务端口*/
-                'port'=>'6379',
-                /*redis访问密码*/
-                'password'   => '',
-                /*要选中的redis数据库索引*/
-                'select'     => 0,
-                // 缓存有效期 0表示永久缓存
-                'expire' => 5,
-                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
-                'persistent' => false,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                //链接超时时间
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-            ];
-            $redis = Cache::connect($option);
-            $rs = $redis->mset($datas);
+            $prefix = input('prefix','');
+            $rs = WatersCache::mset($datas,$prefix);
             $this->success('move',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
@@ -542,8 +259,8 @@ class RedisController extends BaseController
 
     public function check(){
         try{
-            $redis = new \Redis();
-            $redis->connect('127.0.0.1',6379);
+//            $redis = new \Redis();
+//            $redis->connect('127.0.0.1',6379);
 //            $rs = $redis->set('name',false);
 //            dump($rs);
 //            $rs = $redis->exists('name');
@@ -561,28 +278,35 @@ class RedisController extends BaseController
 //            $rs = $redis->mset(['ccc'=>'ccc','ddd'=>'ddd']);
 
 
-            $option = [
-                'host'=>'127.0.0.1',
-                'port'=>'6379',
-                'timeout'=>2,
-                // 驱动方式
-                'type'   => 'Redis',
-                // 缓存保存目录
-                'path'   => CACHE_PATH,
-                // 缓存前缀
-                'prefix' => 'tg_',
-                // 缓存有效期 0表示永久缓存
+//            $option = [
+//                /*redis服务主机ip*/
+//                'host'=>'127.0.0.1',
+//                /*redis服务端口*/
+//                'port'=>'6379',
+//                /*redis访问密码*/
+//                'password'   => '',
+//                /*要选中的redis数据库索引*/
+//                'select'     => 0,
+//                // 缓存有效期 0表示永久缓存
 //                'expire' => 5,
-            ];
-            $redis = Cache::connect($option);
+//                /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
+//                'persistent' => false,
+//                // 缓存前缀
+//                'prefix' => 'tg_',
+//                //链接超时时间
+//                'timeout'=>2,
+//                // 驱动方式
+//                'type'   => 'Redis',
+//            ];
+//            $redis = Cache::connect($option);
 //            $rs = $redis->mset(['ccc'=>'ccc','ddd'=>'ddd']);
-            $rs = $redis->mget(['ccc','ddd']);
+//            $rs = $redis->mget(['ccc','ddd']);
 //            $rs = $redis->set('checkout','it');
 //            dump($rs);
 //            $rs = $redis->mget(['name1','checkout']);
 //            dump($rs);
 //            $rs = $redis->mget(['name1','name5','name2']);
-//            $rs = $redis->get('name');
+//            $rs = $redis->get('name3');
 //            dump($rs);
 //            $rs = $redis->move('name','1');
 //            dump($rs);
@@ -602,6 +326,17 @@ class RedisController extends BaseController
 //            dump($rs);
 //            $rs = $redis->keys();
 //            dump($rs);
+            
+            $rs = WatersCache::get('name','nothing');
+            dump($rs);
+            $rs = WatersCache::set('name','check now',5);
+            dump($rs);
+            $rs = WatersCache::get('name','nothing');
+            dump($rs);
+            $rs = WatersCache::rm('name');
+            dump($rs);
+            $rs = WatersCache::get('name','nothing');
+            dump($rs);
             $this->success('check',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());

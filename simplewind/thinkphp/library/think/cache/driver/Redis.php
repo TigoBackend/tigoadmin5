@@ -214,6 +214,8 @@ class Redis extends Driver
             foreach ($keys as $k => $key){
                 $keys[$k] = $this->getCacheKey($key);
             }
+        }else{
+            $keys = $this->getCacheKey($keys);
         }
         return $this->handler->del($keys);
     }

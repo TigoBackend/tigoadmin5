@@ -298,6 +298,18 @@ return [
         'secret_key'=>'',   /*七牛云存储secret_key*/
         'bucket'=>'',       /*七牛云存储bucket(图片容器)*/
         "domain"=>'',       /*七牛bucket对应的域名*/
-    ]
+    ],
+
+    'redis_config'=>[
+        'host'=>'127.0.0.1',        /*redis服务主机ip*/
+        'port'=>'6379',             /*redis服务端口*/
+        'password'   => '',         /*redis访问密码*/
+        'select'     => 0,          /*要选中的redis数据库索引*/
+        'expire' => 0,              /*缓存有效期 0表示永久缓存*/
+        'persistent' => false,      /*false 脚本结束之后连接就释放了 true脚本结束之后连接不释放，连接保持在php-fpm进程中*/
+        'prefix' => '',         /*缓存前缀*/
+        'timeout'=>2,               /*链接超时时间*/
+        'type'   => 'Redis',        /*驱动方式*/
+    ],
 
 ];
