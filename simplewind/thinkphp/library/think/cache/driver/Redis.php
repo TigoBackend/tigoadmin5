@@ -11,6 +11,7 @@
 
 namespace think\cache\driver;
 
+use mindplay\test\lib\xTestException;
 use think\cache\Driver;
 
 /**
@@ -60,7 +61,7 @@ class Redis extends Driver
     }
 
     /**
-     * 判断缓存
+     * 判断字符串缓存
      * @access public
      * @param string $name 缓存变量名
      * @return bool
@@ -281,6 +282,16 @@ class Redis extends Driver
     }
 
 
+    /**
+     * 判断指定key是否存在
+     * @param $key
+     * @return mixed
+     */
+    public function exists($key){
+        return $this->handler->exists($this->getCacheKey($key));
+    }
+
+
     /*---------------------------------------hash start-----------------------------------------*/
 
     /**
@@ -290,7 +301,7 @@ class Redis extends Driver
      * @return bool
      */
     public function hash_multi_set($key,array $obj){
-        return $this->handler->hMset($key,$obj);
+        return $this->handler->hMset($this->getCacheKey($key),$obj);
     }
 
 
@@ -302,7 +313,7 @@ class Redis extends Driver
      * @return int
      */
     public function hash_set($key,$hash_key,$value){
-        return $this->handler->hSet($key,$hash_key,$value);
+        return $this->handler->hSet($this->getCacheKey($key),$hash_key,$value);
     }
 
 
@@ -312,7 +323,7 @@ class Redis extends Driver
      * @return array
      */
     public function hash_get_all($key){
-        return $this->handler->hGetAll($key);
+        return $this->handler->hGetAll($this->getCacheKey($key));
     }
 
 
@@ -323,7 +334,7 @@ class Redis extends Driver
      * @return string
      */
     public function hash_get($key,$hash_key){
-        return $this->handler->hGet($key,$hash_key);
+        return $this->handler->hGet($this->getCacheKey($key),$hash_key);
     }
 
     /**
@@ -333,8 +344,96 @@ class Redis extends Driver
      * @return array
      */
     public function hash_multi_get($key,array $hash_keys){
-        return $this->handler->hMGet($key,$hash_keys);
+        return $this->handler->hMGet($this->getCacheKey($key),$hash_keys);
     }
+
+
+    /**
+     * 移除单个或多个指定哈希对象下的属性
+     * @param $key
+     * @param string|array $hash_keys
+     * @return bool|int
+     */
+    public function hash_del($key,$hash_keys){
+        if (is_array($hash_keys)){
+            foreach ($hash_keys as $hash_key){
+                $this->handler->hDel($this->getCacheKey($key),$hash_key);
+            }
+            return true;
+        }
+        return $this->handler->hDel($this->getCacheKey($key),$hash_keys);
+    }
+
+
+    /**
+     * 指定哈希对象中指定属性是否存在
+     * @param $key
+     * @param $hash_key
+     * @return bool
+     */
+    public function hash_exists($key,$hash_key){
+        return $this->handler->hExists($this->getCacheKey($key),$hash_key);
+    }
+
+    /**
+     * 为指定哈希对象中指定属性的整数值自增指定数值
+     * @param string $key
+     * @param string $hash_key
+     * @param int $step
+     * @return int
+     */
+    public function hash_increment_by_int($key,$hash_key,$step){
+        return $this->handler->hIncrBy($this->getCacheKey($key),$hash_key,$step);
+    }
+
+
+    /**
+     * 为指定哈希对象中指定属性的浮点数值自增指定数值
+     * @param string $key
+     * @param string $hash_key
+     * @param float $step
+     * @return float
+     */
+    public function hash_increment_by_float($key,$hash_key,$step){
+        return $this->handler->hIncrByFloat($this->getCacheKey($key),$hash_key,$step);
+    }
+
+
+    /**
+     * 获取哈希对象中字段列表
+     * @param string $key
+     * @return array
+     */
+    public function hash_keys($key){
+        return $this->handler->hKeys($this->getCacheKey($key));
+    }
+
+
+    /**
+     * 获取哈希对象字段数量
+     * @param $key
+     * @return int
+     */
+    public function hash_len($key){
+        return $this->handler->hLen($this->getCacheKey($key));
+    }
+
+
+    /**
+     * 获取哈希对象中所有值
+     * @param $key
+     * @return array
+     */
+    public function hash_values($key){
+        return $this->handler->hVals($this->getCacheKey($key));
+    }
+
+    
+
+
+
+
+
 
 
     /*---------------------------------------hash end-----------------------------------------*/

@@ -113,7 +113,7 @@ final class WatersCache
     }
 
     /**
-     * 判断缓存是否存在(自动切换redis/file两种缓存模式)
+     * 判断字符串缓存是否存在(自动切换redis/file两种缓存模式)
      * @param $key
      * @param $prefix
      * @return bool
@@ -123,6 +123,26 @@ final class WatersCache
             $option = [];
             if ($prefix)$option['prefix'] = $prefix;
             return self::init_redis($option,true)->has($key);
+        }catch (\RedisException $e){
+            $cache = self::get_file_cache($key,$prefix);
+            return $cache?true:false;
+        }catch (ErrorException $e){
+            $cache = self::get_file_cache($key,$prefix);
+            return $cache?true:false;
+        }
+    }
+
+    /**
+     * 判断指定key是否存在(自动切换redis/file两种缓存模式)
+     * @param $key
+     * @param string $prefix
+     * @return bool
+     */
+    public static function exists($key,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->exists($key);
         }catch (\RedisException $e){
             $cache = self::get_file_cache($key,$prefix);
             return $cache?true:false;
@@ -330,21 +350,25 @@ final class WatersCache
 
 
 
+
+
     /*-------------------------------------综合缓存(自动切换redis/file两种缓存模式)工具函数end-----------------------------------------*/
 
 
-    /*-----------------------------------------hash start-----------------------------------------*/
+    /*-----------------------------------------hash对象缓存只支持redis缓存模式 start-----------------------------------------*/
 
 
     /**
      * 批量保存哈希对象属性
-     * @param $key
+     * @param string $key
      * @param array $obj
+     * @param string $prefix
      * @return mixed
      */
-    public static function hash_multi_set($key,array $obj){
+    public static function hash_multi_set($key,array $obj,$prefix = ''){
         try{
             $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
             return self::init_redis($option,true)->hash_multi_set($key,$obj);
         }catch (\RedisException $e){
             return false;
@@ -356,14 +380,16 @@ final class WatersCache
 
     /**
      * 保存单个属性到哈希对象
-     * @param $key
-     * @param $hash_key
+     * @param string $key
+     * @param string $hash_key
      * @param $value
+     * @param string $prefix
      * @return mixed
      */
-    public static function hash_set($key,$hash_key,$value){
+    public static function hash_set($key,$hash_key,$value,$prefix = ''){
         try{
             $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
             return self::init_redis($option,true)->hash_set($key,$hash_key,$value);
         }catch (\RedisException $e){
             return false;
@@ -375,12 +401,14 @@ final class WatersCache
 
     /**
      * 获取整个哈希对象
-     * @param $key
+     * @param string $key
+     * @param string $prefix
      * @return mixed
      */
-    public static function hash_get_all($key){
+    public static function hash_get_all($key,$prefix = ''){
         try{
             $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
             return self::init_redis($option,true)->hash_get_all($key);
         }catch (\RedisException $e){
             return false;
@@ -392,13 +420,15 @@ final class WatersCache
 
     /**
      * 获取单个哈希对象属性
-     * @param $key
-     * @param $hash_key
+     * @param string $key
+     * @param string $hash_key
+     * @param string $prefix
      * @return mixed
      */
-    public static function hash_get($key,$hash_key){
+    public static function hash_get($key,$hash_key,$prefix = ''){
         try{
             $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
             return self::init_redis($option,true)->hash_get($key,$hash_key);
         }catch (\RedisException $e){
             return false;
@@ -410,13 +440,15 @@ final class WatersCache
 
     /**
      * 获取多个指定哈希对象属性
-     * @param $key
+     * @param string $key
      * @param array $hash_keys
+     * @param string $prefix
      * @return bool
      */
-    public static function hash_multi_get($key,array $hash_keys){
+    public static function hash_multi_get($key,array $hash_keys,$prefix = ''){
         try{
             $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
             return self::init_redis($option,true)->hash_multi_get($key,$hash_keys);
         }catch (\RedisException $e){
             return false;
@@ -426,7 +458,146 @@ final class WatersCache
     }
 
 
-    /*-----------------------------------------hash end-----------------------------------*/
+    /**
+     * 移除单个或多个指定哈希对象下的属性
+     * @param string $key
+     * @param string|array $hash_keys
+     * @param string $prefix
+     * @return bool
+     */
+    public static function hash_del($key,$hash_keys,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->hash_del($key,$hash_keys);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+
+    /**
+     * 指定哈希对象中指定属性是否存在
+     * @param $key
+     * @param $hash_key
+     * @param string $prefix
+     * @return bool
+     */
+    public static function hash_exists($key,$hash_key,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->hash_exists($key,$hash_key);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+    /**
+     * 为指定哈希对象中指定属性的整数值自增指定数值
+     * @param string $key
+     * @param string $hash_key
+     * @param int $step
+     * @param string $prefix
+     * @return bool|int
+     */
+    public static function hash_increment_by_int($key,$hash_key,$step,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->hash_increment_by_int($key,$hash_key,$step);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+    /**
+     * 为指定哈希对象中指定属性的浮点数值自增指定数值
+     * @param string $key
+     * @param string $hash_key
+     * @param float $step
+     * @param string $prefix
+     * @return bool|int
+     */
+    public static function hash_increment_by_float($key,$hash_key,$step,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->hash_increment_by_float($key,$hash_key,$step);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+    /**
+     * 获取哈希对象中字段列表
+     * @param string $key
+     * @param string $prefix
+     * @return bool
+     */
+    public static function hash_keys($key,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->hash_keys($key);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+    /**
+     * 获取哈希对象字段数量
+     * @param string $key
+     * @param string $prefix
+     * @return bool|int
+     */
+    public static function hash_len($key,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->hash_len($key);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+    /**
+     * 获取哈希对象中所有值
+     * @param string $key
+     * @param string $prefix
+     * @return bool|array
+     */
+    public static function hash_values($key,$prefix = ''){
+        try{
+            $option = [];
+            if ($prefix)$option['prefix'] = $prefix;
+            return self::init_redis($option,true)->hash_values($key);
+        }catch (\RedisException $e){
+            return false;
+        }catch (ErrorException $e){
+            return false;
+        }
+    }
+
+
+
+    
+    
+
+
+
+    /*-----------------------------------------hash对象缓存只支持redis缓存模式 end-----------------------------------*/
 
 
     /*----------------------------------------文本缓存工具函数start-----------------------------------------*/

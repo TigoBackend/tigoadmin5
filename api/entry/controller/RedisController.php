@@ -349,6 +349,25 @@ class RedisController extends BaseController
 //            dump($rs);
 //            $rs = WatersCache::hash_multi_get('Waters',['name','lover']);
 //            dump($rs);
+//            $rs = WatersCache::hash_del('Waters',['name','age']);
+//            dump($rs);
+//            $rs = WatersCache::exists('Waters');
+//            dump($rs);
+//            $rs = WatersCache::hash_exists('Waters','job');
+//            dump($rs);
+//            $rs = WatersCache::hash_keys('Waters');
+//            dump($rs);
+//            $rs = WatersCache::hash_len('Waters');
+//            dump($rs);
+//            $rs = WatersCache::hash_values('Waters');
+//            dump($rs);
+//            $rs = WatersCache::hash_increment_by_int('Waters','age',-3);
+//            dump($rs);
+//            $rs = WatersCache::hash_increment_by_float('Waters','money',-11.11);
+//            dump($rs);
+//            $rs = WatersCache::hash_get_all('Waters');
+//            dump($rs);
+
 
 //            $redis = new \Redis();
 //            $redis->connect('127.0.0.1');
