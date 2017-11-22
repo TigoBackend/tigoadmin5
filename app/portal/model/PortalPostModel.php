@@ -215,7 +215,7 @@ class PortalPostModel extends Model
             $id = $data['id']; //获取删除id
 
             $res = $this->where(['id' => $id])->find();
-
+            cmf_write_log(config("LOG_MODULE.PAGE"),config("LOG_TYPE.DEL"),"删除页面,ID为：".$id.",内容为：".json_encode($res,JSON_UNESCAPED_UNICODE));
             if ($res) {
                 $res = json_decode(json_encode($res), true); //转换为数组
 
@@ -254,7 +254,7 @@ class PortalPostModel extends Model
 
             $res = $this->where(['id' => ['in', $ids]])
                 ->select();
-
+            cmf_write_log(config("LOG_MODULE.PAGE"),config("LOG_TYPE.DEL"),"删除页面,ID为：".implode(",",$ids).",内容为：".json_encode($res,JSON_UNESCAPED_UNICODE));
             if ($res) {
                 $res = json_decode(json_encode($res), true);
                 foreach ($res as $key => $value) {

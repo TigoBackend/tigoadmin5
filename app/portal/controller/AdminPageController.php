@@ -92,6 +92,7 @@ class AdminPageController extends AdminBaseController
 
         $portalPostModel = new PortalPostModel();
         $portalPostModel->adminAddPage($data['post']);
+        cmf_write_log(config("LOG_MODULE.PAGE"),config("LOG_TYPE.ADD"),"添加页面,ID为：".$portalPostModel->id.",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success(lang('ADD_SUCCESS'), url('AdminPage/edit', ['id' => $portalPostModel->id]));
 
     }
@@ -153,7 +154,7 @@ class AdminPageController extends AdminBaseController
         $portalPostModel = new PortalPostModel();
 
         $portalPostModel->adminEditPage($data['post']);
-
+        cmf_write_log(config("LOG_MODULE.PAGE"),config("LOG_TYPE.SAVE"),"修改页面,ID为：".$data['post']['id'].",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success(lang('SAVE_SUCCESS'));
 
     }
@@ -179,6 +180,7 @@ class AdminPageController extends AdminBaseController
 
         $result = $portalPostModel->adminDeletePage($data);
         if ($result) {
+
             $this->success(lang('DELETE_SUCCESS'));
         } else {
             $this->error(lang('DELETE_FAILED'));

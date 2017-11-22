@@ -136,7 +136,9 @@ class PortalCategoryModel extends Model
             }
             $routeModel->getRoutes(true);
         }
-
+        if ($result) {
+            cmf_write_log(config("LOG_MODULE.CATEGORY"),config("LOG_TYPE.ADD"),"添加文章分类,ID为：".$id.",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
+        }
         return $result;
     }
 

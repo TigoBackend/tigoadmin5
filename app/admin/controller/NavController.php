@@ -88,6 +88,7 @@ class NavController extends AdminBaseController
         }
 
         $navModel->allowField(true)->insert($arrData);
+        cmf_write_log(config("LOG_MODULE.NAV"),config("LOG_TYPE.ADD"),"添加导航,ID为：".$navModel->getLastInsID().",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("EDIT_SUCCESS"), url("nav/index"));
 
     }
@@ -144,6 +145,7 @@ class NavController extends AdminBaseController
         }
 
         $navModel->allowField(true)->where(["id" => $arrData["id"]])->update($arrData);
+        cmf_write_log(config("LOG_MODULE.NAV"),config("LOG_TYPE.SAVE"),"修改导航信息,修改ID为：".$arrData["id"].",最新内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("EDIT_SUCCESS"), url("nav/index"));
 
     }
@@ -169,8 +171,9 @@ class NavController extends AdminBaseController
         if (empty($intId)) {
             $this->error(lang("NO_ID"));
         }
-
+        $arrData = $navModel->where(["id" => $intId])->find();
         $navModel->where(["id" => $intId])->delete();
+        cmf_write_log(config("LOG_MODULE.NAV"),config("LOG_TYPE.DEL"),"删除导航信息,删除ID为：".$intId.",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("DELETE_SUCCESS"), url("nav/index"));
 
     }

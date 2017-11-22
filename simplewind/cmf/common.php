@@ -1752,3 +1752,34 @@ function cmf_is_open_registration()
 
     return empty($cmfSettings['open_registration']) ? false : true;
 }
+/*写操作记录*/
+function cmf_write_log($module_name, $action_type, $describe)
+{
+    $log_model = Db::name("log");
+    $log['user_id'] = cmf_get_current_admin_id();
+    $log['module_name'] = $module_name;
+    $log['action_type'] = $action_type;
+    $log['describe'] = $describe;
+    $log['login_ip'] = getIP();
+    $log['create_time'] = time();
+    $log_model->insert($log);
+
+}
+
+ /*
+    获取客户端IP
+ */ 
+function getIP(){            
+    if (getenv("HTTP_CLIENT_IP"))
+         $ip = getenv("HTTP_CLIENT_IP");
+    else if(getenv("HTTP_X_FORWARDED_FOR"))
+            $ip = getenv("HTTP_X_FORWARDED_FOR");
+    else if(getenv("REMOTE_ADDR"))
+         $ip = getenv("REMOTE_ADDR");
+    else $ip = "Unknow";
+    
+    if(preg_match('/^((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1 -9]?\d))))$/', $ip))          
+        return $ip;
+    else
+        return '';
+}

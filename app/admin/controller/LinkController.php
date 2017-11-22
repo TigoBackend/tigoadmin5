@@ -76,10 +76,12 @@ class LinkController extends AdminBaseController
         $data      = $this->request->param();
         $linkModel = new LinkModel();
         $result    = $linkModel->validate(true)->allowField(true)->save($data);
+        
         if ($result === false) {
             $this->error($linkModel->getError());
-        }
-
+        }        
+        $intId = $linkModel->getLastInsID();
+        cmf_write_log(config("LOG_MODULE.LINK"),config("LOG_TYPE.ADD"),"添加友情链接,ID为：".$intId.",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success("添加成功！", url("link/index"));
     }
 
@@ -120,13 +122,14 @@ class LinkController extends AdminBaseController
      */
     public function editPost()
     {
-        $data      = $this->request->param();
+        $data      = $this->request->param();        
         $linkModel = new LinkModel();
         $result    = $linkModel->validate(true)->allowField(true)->isUpdate(true)->save($data);
         if ($result === false) {
             $this->error($linkModel->getError());
         }
-
+        $intId = $data['id'];
+        cmf_write_log(config("LOG_MODULE.LINK"),config("LOG_TYPE.SAVE"),"修改友情链接,ID为：".$intId.",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success("保存成功！", url("link/index"));
     }
 
@@ -146,8 +149,9 @@ class LinkController extends AdminBaseController
     public function delete()
     {
         $id = $this->request->param('id', 0, 'intval');
+        $data = LinkModel::get($id);
         LinkModel::destroy($id);
-
+        cmf_write_log(config("LOG_MODULE.LINK"),config("LOG_TYPE.DEL"),"删除友情链接,ID为：".$id.",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success("删除成功！", url("link/index"));
     }
 

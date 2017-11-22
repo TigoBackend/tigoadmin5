@@ -1,0 +1,46 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('log/index')}">{:lang('USER_LOG')}</a></li>			
+		</ul>
+        <form class="well form-inline margin-top-20" method="post" action="{:url('log/index')}">
+            用户名:
+            <input type="text" class="form-control" name="user_login" id="user_login" style="width: 120px;" value="{:input('request.user_login/s','')}" placeholder="请输入{:lang('USERNAME')}">
+            模块名:
+            <input type="text" class="form-control" name="module" id="module" style="width: 120px;" value="{:input('request.module/s','')}" placeholder="请输入{:lang('LOG_MODULE')}">
+            操作描述:
+            <input type="text" class="form-control" name="describe" id="describe" style="width: 200px;" value="{:input('request.describe/s','')}" placeholder="请输入{:lang('LOG_DESCRIBE')}">
+            <input type="submit" class="btn btn-primary" value="搜索" />
+            <a class="btn btn-danger" href="{:url('log/index')}">清空</a>
+        </form>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th width="100">{:lang('USERNAME')}</th>
+					<th width="120">{:lang('LOG_MODULE')}</th>
+					<th width="200">{:lang('LOG_DESCRIBE')}</th>
+					<th width="80">{:lang('LOG_LOGIN_IP')}</th>
+					<th width="80">{:lang('LOG_ACTION_TIME')}</th>					
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="log_list" item="vo">
+				<tr>
+					<td>{$vo.log_id}</td>
+					<td>{$vo.user_login}</td>
+					<td>{$vo.module_name}</td>
+					<td>{$vo.describe}</td>
+					<td>{$vo.login_ip}</td>
+					<td>{$vo.create_time}</td>										
+				</tr>
+				</foreach>
+			</tbody>			
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

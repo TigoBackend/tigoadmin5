@@ -77,6 +77,8 @@ class SlideItemController extends AdminBaseController
     {
         $data = $this->request->param();
         Db::name('slideItem')->insert($data['post']);
+        $intId = Db::name('slideItem')->getLastInsID();
+        cmf_write_log(config("LOG_MODULE.SLIDE_ITEM"),config("LOG_TYPE.ADD"),"添加幻灯片页面，ID为：".$intId.",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success("添加成功！", url("slideItem/index", ['slide_id' => $data['post']['slide_id']]));
     }
 
@@ -123,7 +125,7 @@ class SlideItemController extends AdminBaseController
         $data['post']['image'] = cmf_asset_relative_url($data['post']['image']);
 
         Db::name('slideItem')->update($data['post']);
-
+        cmf_write_log(config("LOG_MODULE.SLIDE_ITEM"),config("LOG_TYPE.SAVE"),"修改幻灯片页面，ID为：".$data['post']['id'].",最新内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success("保存成功！", url("SlideItem/index", ['slide_id' => $data['post']['slide_id']]));
 
     }
@@ -153,6 +155,7 @@ class SlideItemController extends AdminBaseController
 //            if (file_exists("./upload/".$slideItem['image'])){
 //                @unlink("./upload/".$slideItem['image']);
 //            }
+            cmf_write_log(config("LOG_MODULE.SLIDE_ITEM"),config("LOG_TYPE.DEL"),"删除幻灯片页面，ID为：".$slideItem['slide_id'].",内容为：".json_encode($slideItem,JSON_UNESCAPED_UNICODE));
             $this->success("删除成功！", url("SlideItem/index",["slide_id"=>$slideItem['slide_id']]));
         } else {
             $this->error('删除失败！');

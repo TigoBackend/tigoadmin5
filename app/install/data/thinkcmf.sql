@@ -4881,3 +4881,27 @@ INSERT INTO `cmf_areas` VALUES ('820454', '442000', '五桂山街道', '1', '0',
 INSERT INTO `cmf_areas` VALUES ('820455', '442000', '中山港街道', '1', '0', '', '2', '1');
 INSERT INTO `cmf_areas` VALUES ('441325', '441300', '大亚湾', '1', '0', '', '2', '1');
 INSERT INTO `cmf_areas` VALUES ('441326', '441300', '仲恺区', '1', '0', '', '2', '1');
+
+--
+-- 2017-11-21 19:10 增加操作日志表 jewey
+--
+DROP TABLE IF EXISTS `cmf_log`;
+CREATE TABLE `cmf_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `module_name` varchar(100) DEFAULT NULL COMMENT '模块名',
+  `action_type` tinyint(1) DEFAULT '0' COMMENT '操作类型：1.新增，2.修改，3.删除',
+  `describe` varchar(1000) DEFAULT NULL COMMENT '操作描述',
+  `login_ip` varchar(50) DEFAULT NULL COMMENT '登录ip',
+  `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`log_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=243 DEFAULT CHARSET=utf8;
+
+--
+-- 2017-11-22 09:22 添加操作日志菜单 jewey
+--
+INSERT INTO `cmf_admin_menu` VALUES ('163', '0', '1', '1', '10000', 'Admin', 'Log', 'index', '', '操作日志', '', '');
+--
+-- 2017-11-22 09:22 添加管理员操作日志权限 jewey
+--
+INSERT INTO `cmf_auth_rule` VALUES ('162', '1', 'admin', 'admin_url', 'Admin/Log/index', '', '操作日志', '')

@@ -13,6 +13,12 @@ if (file_exists(CMF_ROOT . "data/conf/config_dev.php")) {
 } else {
     $runtimeConfig = [];
 }
+/*业务配置*/
+if (file_exists(APP_PATH."service_config.php")) {
+    $service_config = include APP_PATH."service_config.php";
+} else {
+    $service_config = [];
+}
 $configs = [
     // +----------------------------------------------------------------------
     // | 应用设置
@@ -238,4 +244,4 @@ $configs = [
         'notify_url' => "",
     ],
 ];
-return array_merge($configs, $runtimeConfig);
+return array_merge($configs, $runtimeConfig, $service_config);

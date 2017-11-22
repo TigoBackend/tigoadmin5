@@ -77,6 +77,8 @@ class SlideController extends AdminBaseController
         if ($result === false) {
             $this->error($slidePostModel->getError());
         }
+        $intId = $slidePostModel->getLastInsID();
+        cmf_write_log(config("LOG_MODULE.SLIDE"),config("LOG_TYPE.ADD"),"添加幻灯片，ID为：".$intId.",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success("添加成功！", url("slide/index"));
     }
 
@@ -117,12 +119,13 @@ class SlideController extends AdminBaseController
      */
     public function editPost()
     {
-        $data           = $this->request->param();
+        $data           = $this->request->param();        
         $slidePostModel = new SlideModel();
         $result         = $slidePostModel->validate(true)->save($data, ['id' => $data['id']]);
         if ($result === false) {
             $this->error($slidePostModel->getError());
         }
+        cmf_write_log(config("LOG_MODULE.SLIDE"),config("LOG_TYPE.SAVE"),"修改幻灯片，ID为：".$data['id'].",最新内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success("保存成功！", url("slide/index"));
     }
 
@@ -165,6 +168,7 @@ class SlideController extends AdminBaseController
         if ($resultSlide) {
             Db::name('recycleBin')->insert($data);
         }
+        cmf_write_log(config("LOG_MODULE.SLIDE"),config("LOG_TYPE.DEL"),"删除幻灯片，ID为：".$id.",内容为：".json_encode($result ,JSON_UNESCAPED_UNICODE));
         $this->success("删除成功！", url("slide/index"));
     }
 }

@@ -85,6 +85,8 @@ class AdminTagController extends AdminBaseController
         $portalTagModel = new PortalTagModel();
         $portalTagModel->isUpdate(false)->allowField(true)->save($arrData);
 
+        $intId = $portalTagModel->getLastInsID();
+        cmf_write_log(config("LOG_MODULE.TAG"),config("LOG_TYPE.ADD"),"添加文章标签,ID为：".$intId.",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("SAVE_SUCCESS"));
 
     }
@@ -140,8 +142,11 @@ class AdminTagController extends AdminBaseController
         }
         $portalTagModel = new PortalTagModel();
 
+        $arrData = $portalTagModel->get($intId);
         $portalTagModel->where(['id' => $intId])->delete();
         Db::name('portal_tag_post')->where('tag_id', $intId)->delete();
+
+        cmf_write_log(config("LOG_MODULE.TAG"),config("LOG_TYPE.DEL"),"删除文章标签,ID为：".$intId.",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("DELETE_SUCCESS"));
     }
 }

@@ -147,7 +147,7 @@ class NavMenuController extends AdminBaseController
         }
 
         $navMenuModel->allowField(true)->isUpdate(false)->save($arrData);
-
+        cmf_write_log(config("LOG_MODULE.NAV_MENU"),config("LOG_TYPE.ADD"),"添加导航菜单，ID为：".$navMenuModel->getLastInsID().",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("EDIT_SUCCESS"), url("NavMenu/index", ['nav_id' => $arrData['nav_id']]));
 
     }
@@ -239,7 +239,7 @@ class NavMenuController extends AdminBaseController
         }
 
         $navMenuModel->update($arrData, ["id" => $intId], true);
-
+        cmf_write_log(config("LOG_MODULE.NAV_MENU"),config("LOG_TYPE.SAVE"),"修改导航菜单，ID为：".$intId.",最新内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("EDIT_SUCCESS"), url("NavMenu/index", ['nav_id' => $arrData['nav_id']]));
 
     }
@@ -273,7 +273,9 @@ class NavMenuController extends AdminBaseController
             $this->error("该菜单下还有子菜单，无法删除！");
         }
 
+        $arrData = $navMenuModel->where(["id" => $intId])->find();
         $navMenuModel->where(["id" => $intId])->delete();
+        cmf_write_log(config("LOG_MODULE.NAV_MENU"),config("LOG_TYPE.DEL"),"删除导航菜单，ID为：".$intId.",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
         $this->success(lang("DELETE_SUCCESS"), url("NavMenu/index", ['nav_id' => $intNavId]));
 
     }

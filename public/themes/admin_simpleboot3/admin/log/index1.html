@@ -1,0 +1,53 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('log/index')}">操作日志</a></li>			
+		</ul>
+        <form class="well form-search" method="post" action="{:url('log/index')}">
+            用户名:
+            <input type="text" name="user_login" id="user_login" style="width: 100px;" value="{:input('request.user_login/s','')}" placeholder="请输入姓名">
+            模块:
+            <input type="text" name="module" id="module" style="width: 100px;" value="{:input('request.module/s','')}" placeholder="请输入模块名">
+            操作描述:
+            <input type="text" name="describe" id="describe" style="width: 200px;" value="{:input('request.describe/s','')}" placeholder="请输入">
+            <input type="submit" class="btn btn-primary" value="搜索" />
+           <button type="button" id="btn_clear" class="btn btn-primary"> 清空查询条件</button>
+        </form>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>用户名</th>
+					<th>模块名</th>
+					<th>操作描述</th>
+					<th>IP</th>
+					<th width="120">操作时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<foreach name="log_list" item="vo">
+				<tr>
+					<td>{$vo.log_id}</td>
+					<td>{$vo.user_login}</td>
+					<td>{$vo.module_name}</td>
+					<td>{$vo.describe}</td>
+					<td>{$vo.login_ip}</td>
+					<td>{$vo.create_time}</td>										
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+		<div class="pagination">{$page}</div>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		$('#btn_clear').click(function(){
+			$('#user_login').val('');
+			$('#module').val('');
+			$('#describe').val('');
+		});
+	</script>
+</body>
+</html>

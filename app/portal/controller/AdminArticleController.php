@@ -128,7 +128,7 @@ class AdminArticleController extends AdminBaseController
             ];
             hook('portal_admin_after_save_article', $hookParam);
 
-
+            cmf_write_log(config("LOG_MODULE.ARTICLE"),config("LOG_TYPE.ADD"),"添加文章,ID为：".$portalPostModel->id);
             $this->success('添加成功!', url('AdminArticle/edit', ['id' => $portalPostModel->id]));
         }
 
@@ -209,13 +209,13 @@ class AdminArticleController extends AdminBaseController
             }
 
             $portalPostModel->adminEditArticle($data['post'], $data['post']['categories']);
-
             $hookParam = [
                 'is_add'  => false,
                 'article' => $data['post']
             ];
+            
             hook('portal_admin_after_save_article', $hookParam);
-
+            cmf_write_log(config("LOG_MODULE.ARTICLE"),config("LOG_TYPE.SAVE"),"修改文章,ID为：".$post['id']);
             $this->success('保存成功!');
 
         }
@@ -254,6 +254,7 @@ class AdminArticleController extends AdminBaseController
             if ($resultPortal) {
                 Db::name('recycleBin')->insert($data);
             }
+            cmf_write_log(config("LOG_MODULE.ARTICLE"),config("LOG_TYPE.DEL"),"删除文章,ID为：".$id);
             $this->success("删除成功！", '');
 
         }
@@ -272,6 +273,7 @@ class AdminArticleController extends AdminBaseController
                     ];
                     Db::name('recycleBin')->insert($data);
                 }
+                cmf_write_log(config("LOG_MODULE.ARTICLE"),config("LOG_TYPE.DEL"),"删除文章,ID为：".implode(",",$ids));
                 $this->success("删除成功！", '');
             }
         }

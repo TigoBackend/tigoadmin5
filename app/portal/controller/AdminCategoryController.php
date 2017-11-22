@@ -100,7 +100,7 @@ class AdminCategoryController extends AdminBaseController
         if ($result === false) {
             $this->error('添加失败!');
         }
-
+        
         $this->success('添加成功!', url('AdminCategory/index'));
 
     }
@@ -176,7 +176,7 @@ class AdminCategoryController extends AdminBaseController
         if ($result === false) {
             $this->error('保存失败!');
         }
-
+        cmf_write_log(config("LOG_MODULE.CATEGORY"),config("LOG_TYPE.SAVE"),"修改文章分类,ID为：".$data['id'].",内容为：".json_encode($data,JSON_UNESCAPED_UNICODE));
         $this->success('保存成功!');
     }
 
@@ -287,6 +287,8 @@ tpl;
             ->update(['delete_time' => time()]);
         if ($result) {
             Db::name('recycleBin')->insert($data);
+
+            cmf_write_log(config("LOG_MODULE.CATEGORY"),config("LOG_TYPE.DEL"),"删除文章分类,ID为：".$id.",内容为：".json_encode($findCategory,JSON_UNESCAPED_UNICODE));
             $this->success('删除成功!');
         } else {
             $this->error('删除失败');

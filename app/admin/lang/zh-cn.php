@@ -156,6 +156,11 @@ return [
     "EMAIL_ACTIVATION"                   => '邮箱激活',
     "EMAIL_SUBJECT"                      => '邮件标题',
     "EMAIL_TEMPLATE"                     => '邮件模版',
-    "EMAIL_TEMPLATE_HELP_TEXT"           => '请用{$link}代替激活链接，{$username}代替用户名'
+    "EMAIL_TEMPLATE_HELP_TEXT"           => '请用{$link}代替激活链接，{$username}代替用户名',
+    /*操作日志*/
+    "LOG_MODULE"                     => '模块名',
+    "LOG_DESCRIBE"                     => '操作描述',
+    "LOG_ACTION_TIME"                     => '操作时间',
+    "LOG_LOGIN_IP"                     => '登录IP',
 ];
 

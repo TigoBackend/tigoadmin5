@@ -42,7 +42,7 @@ class PublicController extends AdminBaseController
                 $result = hook_one('admin_login');
                 if (!empty($result)) {
                     return $result;
-                }
+                }                
                 return $this->fetch(":login");
             }
         }
@@ -105,6 +105,7 @@ class PublicController extends AdminBaseController
                 Db::name('user')->update($result);
                 cookie("admin_username", $name, 3600 * 24 * 30);
                 session("__LOGIN_BY_CMF_ADMIN_PW__", null);
+                cmf_write_log(config("LOG_MODULE.LOGIN"),config("LOG_TYPE.ADD"),"用户登录系统");
                 $this->success(lang('LOGIN_SUCCESS'), url("admin/Index/index"));
             } else {
                 $this->error(lang('PASSWORD_NOT_RIGHT'));
@@ -119,7 +120,8 @@ class PublicController extends AdminBaseController
      */
     public function logout()
     {
-        session('ADMIN_ID', null);
+        cmf_write_log(config("LOG_MODULE.LOGOUT"),config("LOG_TYPE.ADD"),"用户退出系统");        
+        session('ADMIN_ID', null);        
         return redirect(url('/', [], false, true));
     }
 }

@@ -17,7 +17,7 @@ class PublicController extends RestBaseController
 
     // 用户登录 TODO 增加最后登录信息记录,如 ip
     public function login()
-    {
+    {        
         $validate = new Validate([
             'username' => 'require',
             'password' => 'require'
@@ -94,8 +94,7 @@ class PublicController extends RestBaseController
 
         if (empty($result)) {
             $this->error("登录失败!");
-        }
-
+        }        
         $this->success("登录成功!", ['token' => $token]);
     }
 
@@ -107,10 +106,7 @@ class PublicController extends RestBaseController
             'token'       => $this->token,
             'user_id'     => $userId,
             'device_type' => $this->deviceType
-        ])->update(['token' => '']);
-
-        $this->success("退出成功!");
-
+        ])->update(['token' => '']);        
         $this->success("退出成功!");
     }
 
