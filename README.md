@@ -22,10 +22,16 @@
 8、后台新增自定义微信公众号菜单功能
 
 9、后台新增操作日志功能
+
 (1).修改/app/service_config.php 配置文件，添加写日志模块名，如 "TAG" => "门户管理-文章标签",主菜单与子菜单之间用“-”分隔
-(2).配置完后，使用以下函数即可记录日志到数据库：cmf_write_log(config("LOG_MODULE.TAG"),config("LOG_TYPE.ADD"),"添加文章标签,ID为：".$intId.",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
+
+(2).配置完后，使用以下函数即可记录日志到数据库：
+cmf_write_log(config("LOG_MODULE.TAG"),config("LOG_TYPE.ADD"),"添加文章标签,ID为：".$intId.",内容为：".json_encode($arrData,JSON_UNESCAPED_UNICODE));
+
 本例中将插入到数据库的数据转成json再插入,其中JSON_UNESCAPED_UNICODE为防止中文被转成乱码
+
 (3).该功能新增表cmf_log,已在安装文件中写入,新项目直接安装即可,如果是正在使用的版本,则需要执行以下数据库脚本：
+
 2017-11-22 09:22创建日志表
 
     DROP TABLE IF EXISTS `cmf_log`;
