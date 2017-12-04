@@ -10,251 +10,11 @@ namespace api\entry\controller;
 
 
 use api\common\controller\BaseController;
-use think\Cache;
-use think\cache\WatersCache;
 use think\exception\ErrorException;
+use think\RedisCache;
 
 class RedisController extends BaseController
 {
-
-    /**
-     * 设置redis缓存
-     */
-    public function set(){
-        try{
-            $key = input('key','');
-            $value = input('value','');
-            $expire = input('expire',0);
-            $prefix = input('prefix','');
-            $rs = WatersCache::set($key,$value,$expire,$prefix);
-            $this->success('set',json_encode($rs));
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-    /**
-     * 获取redis缓存
-     */
-    public function get(){
-        try{
-            $key = input('key','');
-            $prefix = input('prefix','');
-            $rs = WatersCache::get($key,'nothing',$prefix);
-            $this->success('get',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-    /**
-     * 判断缓存是否存在并且是否有有效值
-     */
-    public function has(){
-        try{
-            $key = input('key','');
-            $prefix = input('prefix','');
-            $rs = WatersCache::has($key,$prefix);
-            $this->success('has',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-    /**
-     * 自增缓存（针对数值缓存）
-     */
-    public function inc(){
-        try{
-            $key = input('key','');
-            $step = input('step',1);
-            $prefix = input('prefix','');
-            $rs = WatersCache::inc($key,$step,$prefix);
-            $this->success('inc',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-    /**
-     * 自减缓存（针对数值缓存）
-     */
-    public function dec(){
-        try{
-            $key = input('key','');
-            $step = input('step',1);
-            $prefix = input('prefix','');
-            $rs = WatersCache::dec($key,$step,$prefix);
-            $this->success('dec',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-    /**
-     * 删除单个缓存
-     */
-    public function rm(){
-        try{
-            $key = input('key','');
-            $prefix = input('prefix','');
-            $rs = WatersCache::rm($key,$prefix);
-            $this->success('rm',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-    /**
-     * 清空当前redis数据库
-     */
-    public function clear(){
-        try{
-            $prefix = input('prefix','');
-            $rs = WatersCache::clear(null,$prefix);
-            $this->success('clear',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-    /**
-     * 查找符合pattern模式给定的key列表
-     */
-    public function keys(){
-        try{
-            $pattern = input('pattern','');
-            $rs = WatersCache::keys($pattern);
-            $this->success('keys',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-    /**
-     * 移除指定key的缓存
-     */
-    public function del(){
-        try{
-            $keys = input('keys','');
-            $prefix = input('prefix','');
-            $rs = WatersCache::del($keys,$prefix);
-            $this->success('del',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-    /**
-     * 删除符合pattern模式的key的缓存,注意pattern不传或传入*表示移除所有缓存
-     */
-    public function del_pattern(){
-        try{
-            $pattern = input('pattern','');
-            $rs = WatersCache::del_pattern($pattern);
-            $this->success('del_pattern',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-    /**
-     * 根据索引切换当前redis数据库
-     */
-    public function select(){
-        try{
-            $index = input('index',0);
-            $rs = WatersCache::select($index);
-            $this->success('index',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-    /**
-     * 将指定key的数据移到指定索引的数据库中
-     */
-    public function move(){
-        try{
-            $key = input('key',0);
-            $db_index = input('db_index',0);
-            $prefix = input('prefix','');
-            $rs = WatersCache::move($key,$db_index,$prefix);
-            $this->success('move',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-    /**
-     * 获取指定数组中的key对应的缓存(批量获取缓存)
-     */
-    public function mget(){
-        try{
-            $keys = input('keys','');
-            $keys = explode(',',$keys);
-            $rs = WatersCache::mget($keys);
-            $this->success('move',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-    /**
-     * 批量添加缓存
-     */
-    public function mset(){
-        try{
-            $datas = [
-                'ccc'=>'111',
-                'ddd'=>'222',
-                'eee'=>'444',
-            ];
-            $prefix = input('prefix','');
-            $rs = WatersCache::mset($datas,$prefix);
-            $this->success('move',$rs);
-        }catch (\RedisException $e){
-            $this->error($e->getMessage());
-        }catch (ErrorException $e){
-            $this->error($e->getMessage());
-        }
-    }
-
-
-
 
 
     public function check(){
@@ -370,13 +130,58 @@ class RedisController extends BaseController
 
 
 //            $redis = new \Redis();
+            $options = [
+                'host'       => '127.0.0.1',
+                'port'       => 6379,
+                'password'   => 'dgTigo003.',
+                'select'     => 0,
+                'timeout'    => 1,
+                'expire'     => 0,
+                'persistent' => false,
+                'prefix'     => 'gyq_',
+            ];
+            $options1 = [
+                'host'       => '127.0.0.1',
+                'port'       => 6379,
+                'password'   => 'dgTigo003.',
+                'select'     => 0,
+                'timeout'    => 0,
+                'expire'     => 0,
+                'persistent' => false,
+                'prefix'     => '',
+            ];
+//            $redis = new Redis($options);
+//            $redis = new \Redis();
 //            $redis->connect('127.0.0.1');
+//            $redis->auth('dgTigo003.');
 //            $rs = $redis->hMset('hm',['name'=>'Waters Fong','age'=>35,'sex'=>'male','job'=>'coder']);
 //            dump($rs);
 //            $rs = $redis->hGetAll('hm');
 //            dump($rs);
 //            $rs = $redis->hGet('hm','age');
 //            dump($rs);
+//            $rs = $redis->list_index('list1',0);
+//            $rs = $redis->lPush('list',json_encode(['name'=>'Ucc'],JSON_UNESCAPED_UNICODE),['name'=>'UBB'],['name'=>'UDD'],['name'=>'UFF'],['name'=>'UQQ'],['name'=>'UUU']);
+//            $rs = $redis->lRem('list',json_encode(['name'=>'UFF'],JSON_UNESCAPED_UNICODE),1);
+//            $rs = $redis->rPushx('lis11t','ddd');
+//            $rs = $redis->has('list1');
+//            $rs = $redis->lRange('list2',0,100);
+//            dump($rs);
+            $redis = RedisCache::connect($options);
+//            $rs = $redis->zAdd('z1',7,'v7');
+//            $rs = $redis->zAdd('z1',1,'v1');
+//            $rs = $redis->zAdd('z1',3,'v3');
+//            $rs = $redis->zAdd('z1',1.1,'v1.1');
+            $rs = $redis->zRange('z1',0,-1,true);
+            dump($rs);
+            $rs = $redis->zRangeByScore('z1',0,3);
+            dump($rs);
+            $rs = $redis->zRevRangeByScore('z1',3,0);
+            dump($rs);
+            $rs = $redis->zRange('z1',0,0);
+            dump($rs);
+            $rs = $redis->zRevRange('z1',0,0);
+            dump($rs);
             $this->success('check',$rs);
         }catch (\RedisException $e){
             $this->error($e->getMessage());
