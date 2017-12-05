@@ -994,13 +994,10 @@ class Redis extends Driver
 
     /**
      * 以第一个集合为基础返回所有集合的差集
-     * 最对比对5个key如果需要比多更多key请使用原生redis的sDiff
+     * 由于要照顾5.6以下的版本,目前分别提供6个集合以下的比对,如要使用6个以上的集合对比请使用原生redis的sDiff函数
      *
      * @param   string  $key1 Any number of keys corresponding to sets in redis.
      * @param   string  $key2 ...
-     * @param   string  $key3 ...
-     * @param   string  $key4 ...
-     * @param   string  $key5 ...
      * @return  array   of strings: The difference of the first set will all the others.
      * @link    http://redis.io/commands/sdiff
      * @example
@@ -1025,21 +1022,35 @@ class Redis extends Driver
      * //}
      * </pre>
      */
-    public function sDiff($key1,$key2,$key3=null,$key4=null,$key5=null){
+    public function sDiff2($key1,$key2){
+        return $this->handler->sDiff($this->getCacheKey($key1),$this->getCacheKey($key2));
+    }
+
+    public function sDiff3($key1,$key2,$key3=null){
+        return $this->handler->sDiff($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3));
+    }
+
+    public function sDiff4($key1,$key2,$key3=null,$key4=null){
+        return $this->handler->sDiff($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4));
+    }
+
+    public function sDiff5($key1,$key2,$key3=null,$key4=null,$key5=null){
         return $this->handler->sDiff($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5));
+    }
+
+
+    public function sDiff6($key1,$key2,$key3=null,$key4=null,$key5=null,$key6=null){
+        return $this->handler->sDiff($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5),$this->getCacheKey($key6));
     }
 
 
     /**
      * 以第一个集合为基础返回所有集合的差集并保存到destination的key中
-     * 最对比对5个key如果需要比多更多key请使用原生redis的sDiffStore
+     * 由于要照顾5.6以下的版本,目前分别提供6个集合以下的比对,如要使用6个以上的集合对比请使用原生redis的sDiffStore函数
      *
      * @param   string  $destination    the key to store the diff into.
      * @param   string  $key1      Any number of keys corresponding to sets in redis
      * @param   string  $key2      ...
-     * @param   string  $key3      ...
-     * @param   string  $key4      ...
-     * @param   string  $key5      ...
      * @return  int:    The cardinality of the resulting set, or FALSE in case of a missing key.
      * @link    http://redis.io/commands/sdiffstore
      * @example
@@ -1066,20 +1077,29 @@ class Redis extends Driver
      * //}
      * </pre>
      */
-    public function sDiffStore($destination,$key1,$key2,$key3=null,$key4=null,$key5=null){
+    public function sDiffStore2($destination,$key1,$key2){
+        return $this->handler->sDiffStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2));
+    }
+    public function sDiffStore3($destination,$key1,$key2,$key3){
+        return $this->handler->sDiffStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3));
+    }
+    public function sDiffStore4($destination,$key1,$key2,$key3,$key4){
+        return $this->handler->sDiffStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4));
+    }
+    public function sDiffStore5($destination,$key1,$key2,$key3,$key4,$key5){
         return $this->handler->sDiffStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5));
+    }
+    public function sDiffStore6($destination,$key1,$key2,$key3,$key4,$key5,$key6){
+        return $this->handler->sDiffStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5),$this->getCacheKey($key6));
     }
 
 
     /**
      * 以第一个集合为基础返回所有集合的交集
-     * 最对比对5个key如果需要比多更多key请使用原生redis的sInter
+     * 由于要照顾5.6以下的版本,目前分别提供6个集合以下的比对,如要使用6个以上的集合对比请使用原生redis的sInter函数
      *
      * @param   string  $key1  keys identifying the different sets on which we will apply the intersection.
      * @param   string  $key2  ...
-     * @param   string  $key3  ...
-     * @param   string  $key4  ...
-     * @param   string  $key5  ...
      * @return  array, contain the result of the intersection between those keys.
      * If the intersection between the different sets is empty, the return value will be empty array.
      * @link    http://redis.io/commands/sinterstore
@@ -1106,21 +1126,30 @@ class Redis extends Driver
      * //}
      * </pre>
      */
-    public function sInter($key1,$key2,$key3=null,$key4=null,$key5=null){
+    public function sInter2($key1,$key2){
+        return $this->handler->sInter($this->getCacheKey($key1),$this->getCacheKey($key2));
+    }
+    public function sInter3($key1,$key2,$key3){
+        return $this->handler->sInter($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3));
+    }
+    public function sInter4($key1,$key2,$key3,$key4){
+        return $this->handler->sInter($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4));
+    }
+    public function sInter5($key1,$key2,$key3,$key4,$key5){
         return $this->handler->sInter($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5));
+    }
+    public function sInter6($key1,$key2,$key3,$key4,$key5,$key6){
+        return $this->handler->sInter($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5),$this->getCacheKey($key6));
     }
 
 
     /**
      * 以第一个集合为基础返回所有集合的交集并保存到新的key中
-     * 最对比对5个key如果需要比多更多key请使用原生redis的sInterStore
+     * 由于要照顾5.6以下的版本,目前分别提供6个集合以下的比对,如要使用6个以上的集合对比请使用原生redis的sInterStore函数
      *
      * @param   string  $destination the key to store the diff into.
      * @param   string  $key1 are intersected as in sInter.
      * @param   string  $key2 ...
-     * @param   string  $key3 ...
-     * @param   string  $key4 ...
-     * @param   string  $key5 ...
      * @return  int:    The cardinality of the resulting set, or FALSE in case of a missing key.
      * @link    http://redis.io/commands/sinterstore
      * @example
@@ -1149,8 +1178,20 @@ class Redis extends Driver
      * //}
      * </pre>
      */
-    public function sInterStore($destination,$key1,$key2,$key3=null,$key4=null,$key5=null){
+    public function sInterStore2($destination,$key1,$key2){
+        return $this->handler->sInterStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2));
+    }
+    public function sInterStore3($destination,$key1,$key2,$key3){
+        return $this->handler->sInterStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3));
+    }
+    public function sInterStore4($destination,$key1,$key2,$key3,$key4){
+        return $this->handler->sInterStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4));
+    }
+    public function sInterStore5($destination,$key1,$key2,$key3,$key4,$key5){
         return $this->handler->sInterStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5));
+    }
+    public function sInterStore6($destination,$key1,$key2,$key3,$key4,$key5,$key6){
+        return $this->handler->sInterStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5),$this->getCacheKey($key6));
     }
 
 
@@ -1339,13 +1380,10 @@ class Redis extends Driver
 
 
     /**
-     * 以第一个集合为基础返回2-5个集合中的并集
-     * 最多比对5个集合,如果需要比对多与5个集合则需要使用原生redis的sUnion函数
+     * 以第一个集合为基础返回2-6个集合中的并集
+     * 由于要照顾5.6以下的版本,目前分别提供6个集合以下的比对,如要使用6个以上的集合对比请使用原生redis的sUnion函数
      * @param   string  $key1 Any number of keys corresponding to sets in redis.
      * @param   string  $key2 ...
-     * @param   string  $key3 ...
-     * @param   string  $key4 ...
-     * @param   string  $key5 ...
      * @return  array   of strings: The union of all these sets.
      * @link    http://redis.io/commands/sunionstore
      * @example
@@ -1373,8 +1411,20 @@ class Redis extends Driver
      * //}
      * </pre>
      */
-    public function sUnion($key1,$key2,$key3=null,$key4=null,$key5=null){
+    public function sUnion2($key1,$key2){
+        return $this->handler->sUnion($this->getCacheKey($key1),$this->getCacheKey($key2));
+    }
+    public function sUnion3($key1,$key2,$key3){
+        return $this->handler->sUnion($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3));
+    }
+    public function sUnion4($key1,$key2,$key3,$key4){
+        return $this->handler->sUnion($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4));
+    }
+    public function sUnion5($key1,$key2,$key3,$key4,$key5){
         return $this->handler->sUnion($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5));
+    }
+    public function sUnion6($key1,$key2,$key3,$key4,$key5,$key6){
+        return $this->handler->sUnion($this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5),$this->getCacheKey($key6));
     }
 
 
@@ -1417,8 +1467,20 @@ class Redis extends Driver
      * //}
      * </pre>
      */
-    public function sUnionStore($destination,$key1,$key2=null,$key3=null,$key4=null,$key5=null){
+    public function sUnionStore2($destination,$key1,$key2){
+        return $this->handler->sUnionStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2));
+    }
+    public function sUnionStore3($destination,$key1,$key2,$key3){
+        return $this->handler->sUnionStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3));
+    }
+    public function sUnionStore4($destination,$key1,$key2,$key3,$key4){
+        return $this->handler->sUnionStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4));
+    }
+    public function sUnionStore5($destination,$key1,$key2,$key3,$key4,$key5){
         return $this->handler->sUnionStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5));
+    }
+    public function sUnionStore6($destination,$key1,$key2,$key3,$key4,$key5,$key6){
+        return $this->handler->sUnionStore($this->getCacheKey($destination),$this->getCacheKey($key1),$this->getCacheKey($key2),$this->getCacheKey($key3),$this->getCacheKey($key4),$this->getCacheKey($key5),$this->getCacheKey($key6));
     }
 
 

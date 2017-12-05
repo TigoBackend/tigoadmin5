@@ -138,7 +138,7 @@ class RedisController extends BaseController
                 'timeout'    => 1,
                 'expire'     => 0,
                 'persistent' => false,
-                'prefix'     => 'gyq_',
+                'prefix'     => '',
             ];
             $options1 = [
                 'host'       => '127.0.0.1',
@@ -172,17 +172,35 @@ class RedisController extends BaseController
 //            $rs = $redis->zAdd('z1',1,'v1');
 //            $rs = $redis->zAdd('z1',3,'v3');
 //            $rs = $redis->zAdd('z1',1.1,'v1.1');
-            $rs = $redis->zRange('z1',0,-1,true);
-            dump($rs);
-            $rs = $redis->zRangeByScore('z1',0,3);
-            dump($rs);
-            $rs = $redis->zRevRangeByScore('z1',3,0);
-            dump($rs);
-            $rs = $redis->zRange('z1',0,0);
-            dump($rs);
-            $rs = $redis->zRevRange('z1',0,0);
-            dump($rs);
-            $this->success('check',$rs);
+//            $rs = $redis->zRange('z1',0,-1,true);
+//            dump($rs);
+//            $rs = $redis->zRangeByScore('z1',0,3);
+//            dump($rs);
+//            $rs = $redis->zRevRangeByScore('z1',3,0);
+//            dump($rs);
+//            $rs = $redis->zRange('z1',0,0);
+//            dump($rs);
+//            $rs = $redis->zRevRange('z1',0,0);
+//            dump($rs);
+//            $rs = $redis->sAdd('s1','1');
+//            $rs = $redis->sAdd('s1','2');
+//            $rs = $redis->sAdd('s1','3');
+//            $rs = $redis->sAdd('s1','4');
+//            $rs = $redis->sAdd('s2','3');
+//            $rs = $redis->sAdd('s2','4');
+//            $rs = $redis->sAdd('s2','5');
+//            $rs = $redis->sAdd('s2','6');
+//            $rs = $redis->sAdd('s3','3');
+//            $rs = $redis->sAdd('s3','4');
+//            $rs = $redis->sAdd('s3','5');
+//            $rs = $redis->sAdd('s3','7');
+//            $rs = $redis->sDiff('s1','s2','s3');
+//            dump($rs);
+//            $rs= RedisCache::connect()->sDiff('s1','s2','s3',null);
+//            dump($rs);
+//            $rs= RedisCache::get_redis()->sDiff('s1','s2','s3',null);
+//            dump($rs);
+            $this->success('check');
         }catch (\RedisException $e){
             $this->error($e->getMessage());
         }catch (ErrorException $e){
