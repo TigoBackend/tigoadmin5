@@ -1,198 +1,210 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: ford
- * Date: 2017/10/27
- * Time: 15:04
+ * yhx 20170906
+ * 微信相关控制器
  */
-
 namespace app\admin\controller;
 
+use \think\Cache;
 
+use app\admin\model\SettingModel;
 use app\admin\model\WxMenuModel;
+use \app\wx\extend\InterfaceWXCommon;
+
 use cmf\controller\AdminBaseController;
-use think\Db;
-use Waters\WebChatApi\Api\WeiXinApi;
-use Waters\WebChatApi\Business\InterfaceWxApiForTP5;
 
 class WxController extends AdminBaseController
 {
 
-    public function index(){
-        $model = new WxMenuModel();
-        $menus = $model -> get_menus_trees();
-        $this->assign('menus',$menus);
+
+	/**
+     * 微信菜单列表   1级菜单
+     * @Author   YHX
+     * @DateTime 2017-07-05T14:43:49+0800
+     * @return   [type]                   [description]
+     */
+    public function wx_menu_index()
+    {
+        $WxMenuModel = new WxMenuModel();
+        $map['delete_time'] = 0;
+        $map['parent_id'] = 0;
+        $WxMenu         = $WxMenuModel->where($map)->order('menu_id DESC')->paginate();//分页查询
+        foreach ($WxMenu as $k => $v) {
+            $WxMenu[$k]['is_show_zh'] = $WxMenu[$k]['is_show'];
+            $WxMenu[$k]['type_zh'] = $WxMenu[$k]['type'];
+        }
+        $this->assign('WxMenu', $WxMenu);
+        $this->assign('page', $WxMenu->render());
         return $this->fetch();
     }
 
     /**
-     * 发布菜单
+     * 微信菜单添加页面 1级菜单
+     * @Author   YHX
+     * @DateTime 2017-07-05T14:44:57+0800
+     * @return   [type]                   [description]
      */
-    public function publish(){
-        $menus = Db::name('WxMenu')->order('parent_id')->select();
-        $menus = ['button'=>$this->createButtons($menus,0)];
-        vendor('waters.webchatapi.index');
-        $config = config('wx_config');
-        $api = new WeiXinApi($config,new InterfaceWxApiForTP5());
-        $rs = $api->create_custom_menu($menus);
-        if ($rs['errcode']) $this->error($rs['errmsg']);
-        $this->success($rs['errmsg']);
+    public function wx_menu_add()
+    {
+    	$WxMenuModel = new WxMenuModel();
+        $map['delete_time'] = 0;
+        $map['parent_id'] = 0;
+        $parent = $WxMenuModel->where($map)->order('menu_id DESC')->select();//1级菜单
+        $this->assign('parent', $parent);
+        return $this->fetch();
     }
 
-
     /**
-     * 从微信服务器拉取公众号菜单数据到本地
+     * 添加微信菜单 1级菜单
+     * @Author   YHX
+     * @DateTime 2017-07-05T14:46:33+0800
+     * @return   [type]                   [description]
      */
-    public function sync(){
-        vendor('waters.webchatapi.index');
-        $config = config('wx_config');
-        $api = new WeixinApi($config,new InterfaceWxApiForTP5());
-        $menu = $api->get_custom_menu();
-        $buttons = $menu['selfmenu_info']['button'];
-        $model = new WxMenuModel();
-        $model->clear_menu();
-        if ($buttons){
-            $this->addButtons($buttons,0);
+    public function wx_menu_addPost()
+    {
+        $WxMenuModel = new WxMenuModel();
+        $data           = $this->request->param();
+        // dump($data);die();
+        $type = $data['type'];
+        $url = $data['url'];
+        $key = $data['key'];
+        if($type == 1){
+        	if(empty($key)){
+        		$this->error("关键词不能为空");
+        	}
+        }elseif($type == 2){
+        	if(empty($url)){
+        		$this->error("外链地址不能为空");
+        	}
         }
-        $this->success('拉取完毕');
-    }
-
-
-    /**
-     * 自动将微信公众号菜单转换为本地数据库数据
-     * @param $buttons
-     * @param $parent_id
-     */
-    private function addButtons($buttons,$parent_id){
-        $sort = 1;
-        foreach ($buttons as $button){
-            $data = array();
-            $data['parent_id'] = $parent_id;
-            $data['list_order'] = $sort++;
-            $data['name'] = $button['name'];
-            if(!isset($button['sub_button'])){
-                $type = $button['type'];
-                if($type == 'view'){
-                    $data['type'] = 'view';
-                }else{
-                    $data['type'] = 'click';
-                }
-                $data['content_type'] = $type;
-                if(isset($button['value'])){
-                    $data['content_value'] = $button['value'];
-                }
-                if(isset($button['url'])){
-                    $data['content_value'] = $button['url'];
-                }
-                if(isset($button['key'])){
-                    $data['content_value'] = $button['key'];
-                }
-                if(isset($button['news_info'])){
-                    $data['content_value'] = json_encode($button['news_info']['list']);
-                }
-            }
-            $data['id'] = Db::name('WxMenu')->insert($data);
-            if(isset($button['sub_button'])){
-                $sub_buttons = $button['sub_button']['list'];
-                $this->addButtons($sub_buttons, $data['id']);
-            }
+        $result         = $WxMenuModel->validate(true)->save($data);
+        if ($result === false) {
+            $this->error($WxMenuModel->getError());
         }
+        $this->success("添加成功！");
     }
-    
-    
-    
-
-
 
     /**
-     * 将本地微信公众号菜单数据封装成微信接口需要的button数据
-     * @param $menus
-     * @param $parent_id
-     * @return array
+     * 编辑微信菜单页面 1级菜单
+     * @Author   YHX
+     * @DateTime 2017-07-05T14:50:22+0800
+     * @return   [type]                   [description]
      */
-    private function createButtons($menus,$parent_id){
-        $json = [];
-        foreach ($menus as $menu){
-            if($menu['parent_id'] != $parent_id){
-                continue;
-            }
-            $data = [];
-            $data['name'] = urlencode($menu['name']);
-            if(empty($menu['type'])){
-                $sub_buttons = $this->createButtons($menus , $menu['id']);
-                $data['sub_button'] = $sub_buttons;
+    public function wx_menu_edit()
+    {
+        $id             = $this->request->param('id');
+        $WxMenuModel = new WxMenuModel();
+        $result         = $WxMenuModel->where('menu_id', $id)->find();
+
+        $map['delete_time'] = 0;
+        $map['parent_id'] = 0;
+        $parent = $WxMenuModel->where($map)->order('menu_id DESC')->select();//1级菜单
+
+        $this->assign('parent', $parent);
+        $this->assign('result', $result);
+        return $this->fetch();
+    }
+
+    /**
+     * 编辑微信菜单 1级菜单
+     * @Author   YHX
+     * @DateTime 2017-07-05T14:50:22+0800
+     * @return   [type]                   [description]
+     */
+    public function wx_menu_editPost()
+    {
+    	$WxMenuModel = new WxMenuModel();
+        $data           = $this->request->param();
+        $type = $data['type'];
+        $url = $data['url'];
+        $key = $data['key'];
+        if($type == 1){
+        	if(empty($key)){
+        		$this->error("关键词不能为空");
+        	}
+        }elseif($type == 2){
+        	if(empty($url)){
+        		$this->error("外链地址不能为空");
+        	}
+        }
+        $result         = $WxMenuModel->validate(true)->save($data, ['menu_id' => $data['menu_id']]);
+        if ($result === false) {
+            $this->error($WxMenuModel->getError());
+        }
+        $this->success("保存成功！");
+    }
+
+    /**
+     * 删除微信菜单
+     * @Author   YHX
+     * @DateTime 2017-07-05T14:50:22+0800
+     * @return   [type]                   [description]
+     */
+    public function wx_menu_delete()
+    {
+        $id             = $this->request->param('id', 0, 'intval');
+        $WxMenuModel = new WxMenuModel();
+        $result         = $WxMenuModel->save(['delete_time' => time()], ['menu_id' => $id]);
+        if ($result === false) {
+            $this->error($WxMenuModel->getError());
+        }
+        $this->success("删除成功！");
+    }
+
+    /**
+     * 子菜单列表
+     * @Author   YHX
+     * @DateTime 2017-09-07T14:49:55+0800
+     * @return   [type]                   [description]
+     */
+    public function wx_sub_menu(){
+    	$WxMenuModel = new WxMenuModel();
+    	$id = $this->request->param('id', 0, 'intval');
+        $map['delete_time'] = 0;
+        $map['parent_id'] = $id;
+        $WxMenu         = $WxMenuModel->where($map)->order('menu_id DESC')->paginate();//分页查询
+        foreach ($WxMenu as $k => $v) {
+            $WxMenu[$k]['is_show_zh'] = $WxMenu[$k]['is_show'];
+            $WxMenu[$k]['type_zh'] = $WxMenu[$k]['type'];
+        }
+        $this->assign('WxMenu', $WxMenu);
+        $this->assign('page', $WxMenu->render());
+        return $this->fetch();
+    }
+
+    /**
+     * 生成微信菜单
+     * @Author   YHX
+     * @DateTime 2017-09-07T17:21:51+0800
+     * @return   [type]                   [description]
+     */
+    public function wx_menu_create(){
+        vendor('wxapi.index');
+        $interface = new \InterfaceWxApiCommon();
+        $api = new \WeixinApi(config('wx_config'),$interface);
+
+        //获取菜单数据
+        $top_menu = get_top_menu();
+        foreach ($top_menu as $k => $v) {//组装菜单格式
+            $top_menu[$k]['sub_button'] = get_sub_menu($v['menu_id']);
+            unset($top_menu[$k]['menu_id']);
+            if(empty($top_menu[$k]['sub_button'])){
+                unset($top_menu[$k]['sub_button']);
             }else{
-                $type = $menu['type'];
-                $data['type'] = $type;
-                if($type == 'view'){
-                    $data['url'] = $menu['content_value'];
-                }else{
-                    $data['key'] = $menu['id'];
-                }
+                unset($top_menu[$k]['type']);
+                unset($top_menu[$k]['key']);
+                unset($top_menu[$k]['url']);
             }
-            array_push($json, $data);
         }
-        return $json;
+        $menus = ['button'=>$top_menu];
+        
+        $rs = $api->create_custom_menu($menus);
+        if($rs['errcode'] == 0){
+            $this->success("生成成功");
+        }else{
+            $this->error("生成失败,稍后请重试".$rs['errmsg']);
+        }
     }
-
-
-    /**
-     * 新增菜单页面
-     */
-    public function add(){
-        $parent_id = $this->request->param('parent_id',0,'intval');
-        $this->assign('parent_id',$parent_id);
-        return $this->fetch();
-    }
-
-
-
-    /**
-     * 提交新增菜单数据
-     */
-    public function add_post(){
-        $params = $this->request->post();
-        $params['content_type'] = $params['type'];
-        $rs = Db::name('WxMenu')->insert($params);
-        if (empty($rs))$this->error('新增菜单失败');
-        $this->success('添加完毕');
-    }
-
-
-    /**
-     * 删除菜单
-     */
-    public function drop(){
-        $id = $this->request->param('id',0,'intval');
-        if (!$id) $this->error('未知菜单');
-        Db::name('WxMenu')->where(['id'=>$id])->whereOr(['parent_id'=>$id])->delete();
-        $this->success('操作完毕');
-    }
-
-
-    /**
-     * 编辑菜单
-     */
-    public function edit(){
-        $id = $this->request->param('id',0,'intval');
-        $wm = Db::name('WxMenu')->where(['id'=>$id])->find();
-        $this->assign('wm',$wm);
-        return $this->fetch();
-    }
-
-
-    /**
-     * 提交编辑菜单
-     */
-    public function edit_post(){
-        $params = $this->request->post();
-        $params['content_type'] = $params['type']?$params['type']:'';
-        $rs = Db::name('WxMenu')->where(['id'=>$params['id']])->update($params);
-        if(!$rs) $this->error('更新失败');
-        $this->success('更新完毕');
-    }
-
-
 
 
 

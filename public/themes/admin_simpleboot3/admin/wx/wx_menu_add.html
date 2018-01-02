@@ -1,0 +1,68 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('wx/wx_menu_index')}">微信菜单列表</a></li>
+        <li class="active"><a href="{:url('wx/wx_menu_add')}">添加微信菜单</a></li>
+    </ul>
+    <form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('wx/wx_menu_addPost')}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上级</label>
+            <div class="col-md-6 col-sm-10">
+                <select class="form-control" name="parent_id">
+                    <option value="0">作为1级菜单</option>
+                    <foreach name="parent" item="vo">
+                        <option value='{$vo.menu_id}'>{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">类型</label>
+            <div class="col-md-6 col-sm-10">
+                <select class="form-control" name="type">
+                    <option value="0">请选择</option>
+                    <option value="1">click</option>
+                    <option value="2">view</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">菜单标题</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="name" value="" placeholder="菜单标题" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">外链地址</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="url" value="" placeholder="外链地址 例:http://www.baidu.com" />
+            </div>
+            <code>类型为view时必填</code>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">点击事件关键词</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="text" class="form-control" name="key" value="" placeholder="点击事件关键词" />
+            </div>
+            <code>类型为click时必填</code>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否显示</label>
+            <div class="col-md-6 col-sm-10">
+                <input type="radio" name="is_show" value="1"  checked="checked">是
+                <input type="radio" name="is_show" value="2"  >否
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <a class="btn btn-default" href="{:url('wx/wx_menu_index')}">返回</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>

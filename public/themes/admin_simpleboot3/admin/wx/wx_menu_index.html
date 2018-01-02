@@ -1,0 +1,49 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:url('wx/wx_menu_index')}">微信菜单列表</a></li>
+			<li><a href="{:url('wx/wx_menu_add')}">添加微信菜单</a></li>
+			<li><a href="{:url('wx/wx_menu_create')}">生成微信菜单</a></li>
+		</ul>
+		<table class="table table-hover table-bordered margin-top-20">
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th>菜单标题</th>
+					<th>类型</th>
+					<th>关键字</th>
+					<th>外链</th>
+					<th>是否显示</th>
+					<th>添加时间</th>
+					<th width="160">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<php>
+
+				</php>
+				<foreach name="WxMenu" item="vo">
+				<tr>
+					<td>{$vo.menu_id}</td>
+					<td>{$vo.name}</td>
+					<td>{$vo.type_zh}</td>
+					<td>{$vo.key}</td>
+					<td>{$vo.url}</td>
+					<td>{$vo.is_show_zh}</td>
+					<td>{$vo.create_time}</td>
+					<td>
+						<a href="javascript:parent.openIframeLayer('{:url('wx/wx_sub_menu',array('id'=>$vo['menu_id']))}','{$vo.name} 子菜单',{});">子菜单 |</a>
+                        <a href="{:url('wx/wx_menu_edit',array('id'=>$vo['menu_id']))}">编辑</a> |
+                        <a href="{:url('wx/wx_menu_delete',array('id'=>$vo['menu_id']))}" class="js-ajax-delete">删除</a> 
+                    </td>
+				</tr>
+				</foreach>
+			</tbody>
+		</table>
+		<ul class="pagination">{$page|default=''}</ul>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>
