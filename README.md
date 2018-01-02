@@ -62,6 +62,7 @@ cmf_write_log(config("LOG_MODULE.TAG"),config("LOG_TYPE.ADD"),"添加文章标�
 2018-1-2 微信基础类添加 生成带参数的二维码、通过ticket换取二维码、新增临时素材、客服接口-发消息接口,后台添加微信菜单管理模块 yhx
 
 创建微信菜单表
+
     DROP TABLE IF EXISTS `cmf_wx_menu`;
     CREATE TABLE `finger_wx_menu` (
       `menu_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
