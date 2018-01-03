@@ -103,6 +103,153 @@ cmf_write_log(config("LOG_MODULE.TAG"),config("LOG_TYPE.ADD"),"添加文章标�
     INSERT INTO `cmf_auth_rule` VALUES ('169', '1', 'admin', 'admin_url', 'Admin/Wx/wx_sub_menu', '', '子菜单列表', '');
     INSERT INTO `cmf_auth_rule` VALUES ('170', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_create', '', '生成微信菜单', '');
 
+
+2018-1-3 新增workerman服务及使用websocket通过workerman向前端推送消息
+
+
+1.服务端文件/public/workerman/push_server.php 执行php push_server.php命令运行脚本执行web socket进行端口监听,与前端进行建立长链接,接收后端接口的推送命令并推送消息给前端
+```
+$worker = new \Workerman\Worker('websocket://127.0.0.1:1234');
+
+$worker->uidConnections = [];
+
+$worker->onWorkerStart = 'on_worker_start';
+
+$worker->onMessage = 'on_message';
+
+$worker->onClose = 'on_close';
+
+
+/**
+ * web socket worker启动回调
+ * @param \Workerman\Worker $worker
+ * @return bool
+ */
+function on_worker_start(\Workerman\Worker $worker){
+    try{
+        $inner_text_worker = new \Workerman\Worker('text://127.0.0.1:5678');
+        $inner_text_worker->onMessage = function (\Workerman\Connection\TcpConnection $connection,$buffer){
+            $data = json_decode($buffer,true);
+            $uid = $data['uid'];
+            $ret = send_message_by_uid($uid,$buffer);
+            $connection->send($ret?'ok':'fail');
+        };
+        $inner_text_worker->listen();
+    }catch (Exception $e){
+        return false;
+    }
+    return true;
+}
+
+
+/**
+ * web socket worker 收到前端消息时的回调
+ * @param \Workerman\Connection\TcpConnection $connection
+ * @param $data
+ */
+function on_message(\Workerman\Connection\TcpConnection $connection,$data){
+    global $worker;
+    if (!isset($connection->uid)){
+        $connection->uid = $data;
+
+        $worker->uidConnections[$connection->uid] = $connection;
+    }
+}
+
+
+/**
+ * 与前端断开链接时的回调
+ * @param \Workerman\Connection\TcpConnection $connection
+ */
+function on_close(\Workerman\Connection\TcpConnection $connection){
+    global $worker;
+    if (isset($connection->uid)){
+        unset($worker->uidConnections[$connection->uid]);
+    }
+}
+
+
+/**
+ * 推送消息给所有前端用户
+ * @param $message
+ */
+function broadcast($message){
+    global  $worker;
+    foreach ($worker->uidConnections as $connection){
+        $connection->send($message);
+    }
+}
+
+
+/**
+ * 发送消息给指定uid用户
+ * @param $uid
+ * @param $message
+ * @return bool
+ */
+function send_message_by_uid($uid,$message){
+    global $worker;
+    if (isset($worker->uidConnections[$uid])){
+        $connection = $worker->uidConnections[$uid];
+        $connection->send($message);
+        return true;
+    }
+    return false;
+}
+
+
+\Workerman\Worker::runAll();
+
+```
+2.前端页面/public/themes/admin_simpleboot3/admin/push/index.html 负责链接worker man建立长连接,接收消息推送
+```
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="">接收消息推送</a></li>
+		</ul>
+
+
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+<script>
+	var ws = new WebSocket('ws://127.0.0.1:1234');
+	ws.onopen = function () {
+	    console.log('ddd');
+		var uid = 1;
+		ws.send(uid);
+    };
+	ws.onmessage = function (e) {
+		alert(e.data);
+    }
+
+</script>
+
+```
+
+3、接口文件/api/entry/controller/WorkerManController后台接口执行推送消息命令交给worker man进行推送
+```
+ /**
+     * 向worker man的web socket服务推送消息
+     */
+    public function push_to_front(){
+        try{
+            $client = stream_socket_client('tcp://127.0.0.1:5678',$errno,$errmsg,1);
+            $data = ['uid'=>'1','percent'=>'99%'];
+            fwrite($client,json_encode($data)."\n");
+
+            $this->success(fread($client,8192));
+        }catch (Exception $e){
+            $this->error($e->getMessage());
+        }
+    }
+```
+
+
+
+
+
 ##本工程仅限学习使用
 
 
