@@ -58,6 +58,51 @@ cmf_write_log(config("LOG_MODULE.TAG"),config("LOG_TYPE.ADD"),"添加文章标�
 
     INSERT INTO `cmf_auth_rule` VALUES ('162', '1', 'admin', 'admin_url', 'Admin/Log/index', '', '操作日志', '')
 
+
+2018-1-2 微信基础类添加 生成带参数的二维码、通过ticket换取二维码、新增临时素材、客服接口-发消息接口,后台添加微信菜单管理模块 yhx
+
+创建微信菜单表
+
+    DROP TABLE IF EXISTS `cmf_wx_menu`;
+    CREATE TABLE `finger_wx_menu` (
+      `menu_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      `type` int(2) NOT NULL DEFAULT '1' COMMENT '类型 1.click 2.view',
+      `name` varchar(255) NOT NULL COMMENT '菜单标题',
+      `url` varchar(255) DEFAULT NULL COMMENT '外链地址',
+      `key` varchar(255) DEFAULT NULL COMMENT '点击事件关键词',
+      `parent_id` int(10) DEFAULT '0' COMMENT '父id',
+      `is_show` int(2) DEFAULT '2' COMMENT '是否显示 1.显示 2.隐藏',
+      `sort` int(10) DEFAULT '0' COMMENT '排序',
+      `create_time` int(11) NOT NULL COMMENT '新增时间',
+      `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
+      `delete_time` int(11) DEFAULT '0' COMMENT '删除时间(软删除)',
+      PRIMARY KEY (`menu_id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+
+
+
+2018-1-2  添加微信菜单菜单 yhx
+
+    INSERT INTO `cmf_admin_menu` VALUES ('164', '0', '1', '1', '10000', 'Admin', 'Wx', 'wx_menu_index', '', '微信菜单列表', '', '');
+    INSERT INTO `cmf_admin_menu` VALUES ('165', '0', '2', '1', '10000', 'Admin', 'Wx', 'wx_menu_add', '', '微信菜单添加页面', '', '');
+    INSERT INTO `cmf_admin_menu` VALUES ('166', '0', '2', '1', '10000', 'Admin', 'Wx', 'wx_menu_addPost', '', '添加微信菜单', '', '');
+    INSERT INTO `cmf_admin_menu` VALUES ('167', '0', '2', '1', '10000', 'Admin', 'Wx', 'wx_menu_edit', '', '编辑微信菜单页面', '', '');
+    INSERT INTO `cmf_admin_menu` VALUES ('168', '0', '2', '1', '10000', 'Admin', 'Wx', 'wx_menu_editPost', '', '编辑微信菜单', '', '');
+    INSERT INTO `cmf_admin_menu` VALUES ('169', '0', '2', '1', '10000', 'Admin', 'Wx', 'wx_menu_delete', '', '删除微信菜单', '', '');
+    INSERT INTO `cmf_admin_menu` VALUES ('170', '0', '2', '1', '10000', 'Admin', 'Wx', 'wx_sub_menu', '', '子菜单列表', '', '');
+    INSERT INTO `cmf_admin_menu` VALUES ('171', '0', '2', '1', '10000', 'Admin', 'Wx', 'wx_menu_create', '', '生成微信菜单', '', '');
+
+2018-1-2 添加管理员微信菜单权限 yhx
+
+    INSERT INTO `cmf_auth_rule` VALUES ('163', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_index', '', '微信菜单列表', '');
+    INSERT INTO `cmf_auth_rule` VALUES ('164', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_add', '', '微信菜单添加页面', '');
+    INSERT INTO `cmf_auth_rule` VALUES ('165', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_addPost', '', '添加微信菜单', '');
+    INSERT INTO `cmf_auth_rule` VALUES ('166', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_edit', '', '编辑微信菜单页面', '');
+    INSERT INTO `cmf_auth_rule` VALUES ('167', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_editPost', '', '编辑微信菜单', '');
+    INSERT INTO `cmf_auth_rule` VALUES ('168', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_delete', '', '删除微信菜单', '');
+    INSERT INTO `cmf_auth_rule` VALUES ('169', '1', 'admin', 'admin_url', 'Admin/Wx/wx_sub_menu', '', '子菜单列表', '');
+    INSERT INTO `cmf_auth_rule` VALUES ('170', '1', 'admin', 'admin_url', 'Admin/Wx/wx_menu_create', '', '生成微信菜单', '');
+
 ##本工程仅限学习使用
 
 
