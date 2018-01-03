@@ -26,11 +26,16 @@ class ComposerStaticInit929fb365b9981d29459d58f676689cf7
         ),
         'W' => 
         array (
+            'Workerman\\' => 10,
             'Waters\\WebChatApi\\' => 18,
         ),
         'Q' => 
         array (
             'Qiniu\\' => 6,
+        ),
+        'G' => 
+        array (
+            'GatewayWorker\\' => 14,
         ),
         'F' => 
         array (
@@ -59,6 +64,10 @@ class ComposerStaticInit929fb365b9981d29459d58f676689cf7
         array (
             0 => __DIR__ . '/..' . '/mindplay/annotations/src/annotations',
         ),
+        'Workerman\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/workerman-for-win',
+        ),
         'Waters\\WebChatApi\\' => 
         array (
             0 => __DIR__ . '/..' . '/waters/webchatapi/src',
@@ -66,6 +75,10 @@ class ComposerStaticInit929fb365b9981d29459d58f676689cf7
         'Qiniu\\' => 
         array (
             0 => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu',
+        ),
+        'GatewayWorker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/gateway-worker-for-win/src',
         ),
         'FontLib\\' => 
         array (

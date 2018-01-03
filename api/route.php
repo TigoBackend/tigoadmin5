@@ -20,6 +20,7 @@ foreach ($apps as $app) {
 
 return [
     '__miss__'=>'entry/Index/index',
+    'test'=>'entry/Index/test',
     /*微信接口*/
     'wx/login'=>'entry/Wx/login',
     'wx/login_callback'=>'entry/Wx/login_callback',
@@ -59,4 +60,9 @@ return [
     'redis/move'=>'entry/Redis/move',
     'redis/mget'=>'entry/Redis/mget',
     'redis/mset'=>'entry/Redis/mset',
+
+    /*worker man 实例*/
+    'worker_man/push'=>'entry/WorkerMan/push_to_front',
+
+
 ];

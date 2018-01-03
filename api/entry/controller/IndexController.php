@@ -11,6 +11,7 @@ namespace api\entry\controller;
 
 use api\common\controller\BaseController;
 use api\common\lib\exception\MyException;
+use think\Exception;
 
 class IndexController extends BaseController
 {
@@ -19,5 +20,22 @@ class IndexController extends BaseController
         config('default_return_type','html');
         return "<!doctype html><html><head></head><body><div  style='position: absolute;left: 0px;top: 0px;width: 100%;height: 100%'><img src='http://img.qdczj.com/error.jpg' width='100%'></div></body></html>";
     }
+
+
+
+
+    public function test(){
+        try{
+            $this->success('test');
+        }catch (Exception $e){
+            return ['msg'=>$e->getMessage()];
+        }
+    }
+
+
+
+
+
+
 
 }

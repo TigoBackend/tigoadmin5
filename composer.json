@@ -28,7 +28,9 @@
         "dompdf/dompdf": "^0.8.0",
         "phpoffice/phpexcel": "^1.8",
         "ezyang/htmlpurifier": "^4.9",
-        "waters/webchatapi":"^1.0"
+        "waters/webchatapi":"^1.0",
+        "workerman/workerman-for-win":"dev-master",
+        "workerman/gateway-worker-for-win":"dev-master"
     },
     "extra": {
     },
