@@ -12,6 +12,61 @@
     <link href="__TMPL__/public/assets/themes/{:cmf_get_admin_style()}/bootstrap.min.css" rel="stylesheet">
     <link href="__STATIC__/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="__TMPL__/public/assets/themes/{:cmf_get_admin_style()}/login.css" rel="stylesheet">
+    <style>
+        body{
+            padding: 0;
+            margin: 0;
+            background: url("__TMPL__/public/assets/images/bg-2.jpg");
+            filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+            -moz-background-size:100% 100%;
+            background-size:100% 100%;
+        }
+
+        @media screen and (min-width: 1440px) {
+            .row .col-md-4 {
+                width: 40%;
+            }
+            .row .col-md-offset-4 {
+                margin-left: 30%;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            .row .col-md-4 {
+                width: 60%;
+            }
+            .row .col-md-offset-4 {
+                margin-left: 20%;
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+            .row .col-md-4 {
+                width: 60%;
+            }
+            .row .col-md-offset-4 {
+                margin-left: 20%;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            .row .col-md-4 {
+                width: 80%;
+            }
+            .row .col-md-offset-4 {
+                margin-left: 10%;
+            }
+        }
+
+        .wrap {
+            margin-top: 100px;
+        }
+
+        .input-group-addon {
+            color: #999;
+        }
+
+    </style>
     <script>
         if (window.parent !== window.self) {
             document.write              = '';
@@ -21,33 +76,49 @@
             }, 0);
         }
     </script>
+
 </head>
 <body>
 <div class="wrap">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <div><img src="__TMPL__/public/assets/images/tg-logo.png" width="100%" /></div>
-                <form class="js-ajax-form" action="{:url('public/doLogin')}" method="post">
-                    <div class="form-group">
-                        <input type="text" id="input_username" class="form-control" name="username"
+                <div style="margin: 20px 0;"><img src="__TMPL__/public/assets/images/tg-logo.png" width="100%" style="display: block; width: 100%; max-width: 400px; margin: 0 auto;" /></div>
+                <!--<h1 class="text-center">TiGoNetWork</h1>-->
+                <form class="js-ajax-form" style="background-color: #fff; padding: 50px 40px;" action="{:url('public/doLogin')}" method="post">
+                    <!--<div class="form-group input-group">-->
+                        <!--<div class="input-group-addon"><i class="fa fa-user"></i></div>-->
+                        <!--<input name="username" type="text" class="form-control input-lg" placeholder="请输入用户名登录">-->
+                    <!--</div>-->
+                    <!--<div class="form-group input-group">-->
+                        <!--<div class="input-group-addon"><i class="fa fa-unlock-alt"></i></div>-->
+                        <!--<input name="password" type="password" class="form-control input-lg" placeholder="请输入登录密码">-->
+                    <!--</div>-->
+
+                    <div class="form-group input-group">
+                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                        <input type="text" id="input_username" class="form-control input-lg" name="username"
                                placeholder="{:lang('USERNAME_OR_EMAIL')}" title="{:lang('USERNAME_OR_EMAIL')}"
                                value="{:cookie('admin_username')}" data-rule-required="true" data-msg-required="">
                     </div>
 
-                    <div class="form-group">
-                        <input type="password" id="input_password" class="form-control" name="password"
+                    <div class="form-group input-group">
+                        <div class="input-group-addon"><i class="fa fa-unlock-alt"></i></div>
+                        <input type="password" id="input_password" class="form-control input-lg" name="password"
                                placeholder="{:lang('PASSWORD')}" title="{:lang('PASSWORD')}" data-rule-required="true"
                                data-msg-required="">
                     </div>
 
-                    <div class="form-group">
-                        <captcha font-size="18" style="cursor: pointer; width: 100%; height: 50px;"/>
-                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<captcha font-size="18" style="cursor: pointer; width: 100%; height: 50px;"/>-->
+                    <!--</div>-->
 
-                    <div class="form-group">
+                    <div class="form-group input-group">
+                        <div class="input-group-addon"><i class="fa fa-lock"></i></div>
                         <div style="position: relative;">
                             <input type="text" name="captcha" placeholder="验证码" class="form-control captcha">
+                            <captcha height="32" width="150" font-size="18"
+                                     style="cursor: pointer;position:absolute;right:1px;top:1px; z-index: 99;"/>
                         </div>
                     </div>
 
