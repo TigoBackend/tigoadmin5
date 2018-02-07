@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>TIGONETWORK {:lang('ADMIN_CENTER')}</title>
+    <title>工友圈 {:lang('ADMIN_CENTER')}</title>
     <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge"/>
     <meta name="renderer" content="webkit|ie-comp|ie-stand">
     <meta name="robots" content="noindex,nofollow">
@@ -12,61 +12,6 @@
     <link href="__TMPL__/public/assets/themes/{:cmf_get_admin_style()}/bootstrap.min.css" rel="stylesheet">
     <link href="__STATIC__/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="__TMPL__/public/assets/themes/{:cmf_get_admin_style()}/login.css" rel="stylesheet">
-    <style>
-        body{
-            padding: 0;
-            margin: 0;
-            background: url("__TMPL__/public/assets/images/bg-2.jpg");
-            filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
-            -moz-background-size:100% 100%;
-            background-size:100% 100%;
-        }
-
-        @media screen and (min-width: 1440px) {
-            .row .col-md-4 {
-                width: 40%;
-            }
-            .row .col-md-offset-4 {
-                margin-left: 30%;
-            }
-        }
-
-        @media screen and (min-width: 1200px) {
-            .row .col-md-4 {
-                width: 60%;
-            }
-            .row .col-md-offset-4 {
-                margin-left: 20%;
-            }
-        }
-
-        @media screen and (min-width: 992px) {
-            .row .col-md-4 {
-                width: 60%;
-            }
-            .row .col-md-offset-4 {
-                margin-left: 20%;
-            }
-        }
-
-        @media screen and (min-width: 768px) {
-            .row .col-md-4 {
-                width: 80%;
-            }
-            .row .col-md-offset-4 {
-                margin-left: 10%;
-            }
-        }
-
-        .wrap {
-            margin-top: 100px;
-        }
-
-        .input-group-addon {
-            color: #999;
-        }
-
-    </style>
     <script>
         if (window.parent !== window.self) {
             document.write              = '';
@@ -76,61 +21,63 @@
             }, 0);
         }
     </script>
-
+    <style>
+        #login_form .form-group span{
+            border-top-left-radius:5px;border-bottom-left-radius:5px;color: #776363;background-color: #fff;border: 1px solid #fff
+        }
+        #login_form .form-group input{
+            line-height: 49px;height: 49px;border-top-right-radius:5px;border-bottom-right-radius:5px;border: 1px solid #fff
+        }
+    </style>
 </head>
 <body>
 <div class="wrap">
-    <div class="container">
+    <div class="container" style="margin-top: 140px">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div style="margin: 20px 0;"><img src="__TMPL__/public/assets/images/tg-logo.png" width="100%" style="display: block; width: 100%; max-width: 400px; margin: 0 auto;" /></div>
-                <!--<h1 class="text-center">TiGoNetWork</h1>-->
-                <form class="js-ajax-form" style="background-color: #fff; padding: 50px 40px;" action="{:url('public/doLogin')}" method="post">
-                    <!--<div class="form-group input-group">-->
-                        <!--<div class="input-group-addon"><i class="fa fa-user"></i></div>-->
-                        <!--<input name="username" type="text" class="form-control input-lg" placeholder="请输入用户名登录">-->
-                    <!--</div>-->
-                    <!--<div class="form-group input-group">-->
-                        <!--<div class="input-group-addon"><i class="fa fa-unlock-alt"></i></div>-->
-                        <!--<input name="password" type="password" class="form-control input-lg" placeholder="请输入登录密码">-->
-                    <!--</div>-->
+            <div class="col-md-6 col-md-offset-3">
+                <div style="text-align: center"><img src="__TMPL__/public/assets/images/tg-logo.png" width="25%" style="text-align: center;margin-bottom: 25px" /></div>
+                <div style="text-align: center;margin-bottom: 20px"><span style="color: #fff;font-size: 24px">东莞市天高网络科技有限公司</span></div>
 
-                    <div class="form-group input-group">
-                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                        <input type="text" id="input_username" class="form-control input-lg" name="username"
-                               placeholder="{:lang('USERNAME_OR_EMAIL')}" title="{:lang('USERNAME_OR_EMAIL')}"
-                               value="{:cookie('admin_username')}" data-rule-required="true" data-msg-required="">
-                    </div>
 
-                    <div class="form-group input-group">
-                        <div class="input-group-addon"><i class="fa fa-unlock-alt"></i></div>
-                        <input type="password" id="input_password" class="form-control input-lg" name="password"
-                               placeholder="{:lang('PASSWORD')}" title="{:lang('PASSWORD')}" data-rule-required="true"
-                               data-msg-required="">
-                    </div>
+                <div  class="col-md-8 col-md-offset-2" style="background-color: rgba(239,239,239,1);border-radius:5px;">
+                    <form class="js-ajax-form" action="{:url('public/doLogin')}" method="post" id="login_form">
 
-                    <!--<div class="form-group">-->
-                        <!--<captcha font-size="18" style="cursor: pointer; width: 100%; height: 50px;"/>-->
-                    <!--</div>-->
 
-                    <div class="form-group input-group">
-                        <div class="input-group-addon"><i class="fa fa-lock"></i></div>
-                        <div style="position: relative;">
-                            <input type="text" name="captcha" placeholder="验证码" class="form-control captcha">
-                            <captcha height="32" width="150" font-size="18"
-                                     style="cursor: pointer;position:absolute;right:1px;top:1px; z-index: 99;"/>
+                        <div class="input-group form-group" style="margin-top: 30px">
+                            <span  class="input-group-addon" id="basic-addon1">账户名</span>
+                            <input  type="text" id="input_username" class="form-control" name="username"
+                                   placeholder="请填写您的管理账号" title="{:lang('USERNAME_OR_EMAIL')}"
+                                   value="" data-rule-required="true" data-msg-required="" aria-describedby="basic-addon1">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <input type="hidden" name="redirect" value="">
-                        <button class="btn btn-primary btn-block js-ajax-submit" type="submit" style="margin-left: 0px"
-                                data-loadingmsg="{:lang('LOADING')}">
-                            {:lang('LOGIN')}
-                        </button>
-                    </div>
+                        <div class="input-group form-group">
+                            <span  class="input-group-addon" id="basic-addon2">密码&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <input type="password" id="input_password" class="form-control" name="password"
+                                   placeholder="请输入密码" title="{:lang('PASSWORD')}" data-rule-required="true"
+                                   data-msg-required="" aria-describedby="basic-addon2">
+                        </div>
 
-                </form>
+
+
+                        <div class="input-group form-group">
+                            <span  class="input-group-addon" id="basic-addon3">验证码</span>
+                                <input  type="text" name="captcha" placeholder="请输入右边验证码" class="form-control captcha" aria-describedby="basic-addon3" style="border-radius: 0px">
+                            <span  style="border-top-left-radius:0px;border-bottom-left-radius:0px;border-top-right-radius:5px;border-bottom-right-radius:5px;" class="input-group-addon"> <captcha font-size="30" style="padding: 1px;cursor: pointer; width: 100px;"/></span>
+
+                        </div>
+
+                        <div class="form-group" style="margin-top: 30px;margin-bottom: 30px">
+                            <input type="hidden" name="redirect" value="">
+                            <button class="btn btn-primary btn-block js-ajax-submit" type="submit" style="height: 49px;background-color: #ff884e;text-align: center;vertical-align:middle;font-size: 16px;border: 0px;border-radius: 5px;margin-left: 0px"
+                                    data-loadingmsg="{:lang('LOADING')}">
+                                <b>进入管理中心</b>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12 " style="text-align: center;margin-top: 30px"><img src="__TMPL__/public/assets/images/technicalSupport.png" alt=""></div>
+                <div class="col-md-12"  style="color: #ccc;text-align: center;color: #fff;margin-top: 20px">东莞市天高网络科技有限公司&nbsp;&nbsp;  <a style="color: #fff;"
+                        href="http://www.tigonetwork.com">http://www.tigonetwork.com</a></div>
             </div>
         </div>
 
