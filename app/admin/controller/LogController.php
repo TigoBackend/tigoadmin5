@@ -32,7 +32,7 @@ class LogController extends AdminbaseController{
         $log_list = $this->log_model
         		 ->alias('l')
         		 ->field($field)
-        		 ->join("cmf_user u","u.id = l.user_id","left")//->join("left join cmf_users u on u.id = l.user_id")
+        		 ->join("user u","u.id = l.user_id","left")//->join("left join cmf_users u on u.id = l.user_id")
          	     ->where($where)
          	     ->order("create_time DESC")
          	     ->paginate(10);
