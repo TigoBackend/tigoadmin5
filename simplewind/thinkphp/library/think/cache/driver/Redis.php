@@ -947,7 +947,7 @@ class Redis extends Driver
 
 
     /**
-     * 
+     *
      * @param $key
      * @param $second
      */
@@ -1526,7 +1526,7 @@ class Redis extends Driver
      * 向有序集合中添加一个数据
      * @param string $key
      * @param float $score
-     * @param string $member
+     * @param $member
      * @return int
      */
     public function zAdd($key,$score,$member){
@@ -1854,11 +1854,11 @@ class Redis extends Driver
      * </pre>
      */
     public function zRevRange($key, $start, $end, $withScores = null){
-        $tmp = $this->handler->zRevRange($this->getCacheKey($key),$start,$end,$withScores);
+        $tmp = $this->handler->zRevRange($this->getCacheKey($key),$start,$end,$withScores === true ? 'withScores':null);
         $result = [];
         if ($withScores === true){
             foreach ($tmp as $k => $value){
-                $result[] = $this->string_to_value($value);
+                $result[] = [$value=>$this->string_to_value($k)];
             }
         }else{
             foreach ($tmp as $k => $value){
