@@ -34,6 +34,15 @@ define('RUNTIME_PATH', CMF_ROOT . 'data/runtime/');
 // 定义CMF 版本号
 define('THINKCMF_VERSION', '5.0.170912');
 
+
+/*---------------------------------------------------------------天高常量start-----------------------------------------------*/
+define('UPLOAD_PATH',__DIR__.'/upload/');    /*定义文件上传目录*/
+define("CHECK_REQUEST_METHOD_THROW","THROW");   /*校验访问方式异常处理方式抛出异常*/
+define("CHECK_REQUEST_METHOD_RETURN","RETURN");     /*校验访问方式异常处理方式return bool*/
+define('IMAGE_TYPE_AVATAR',1);          /*图片类型：头像*/
+/*---------------------------------------------------------------天高常量end-----------------------------------------------*/
+
+
 // 加载框架基础文件
 require CMF_ROOT . 'simplewind/thinkphp/base.php';
 

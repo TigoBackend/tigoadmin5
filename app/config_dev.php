@@ -243,5 +243,15 @@ $configs = [
         'encodingaeskey' => '',
         'notify_url' => "",
     ],
+
+
+    'common'=>[
+        'path_upload'=>UPLOAD_PATH,     /*上传文件文件夹本地根目录绝对路径*/
+        'path_upload_tmp' => UPLOAD_PATH.'tmp/',    /*临时文件目录绝对路径*/
+        'path_avatar' => UPLOAD_PATH.'avatar/',    /*头像目录绝对路径*/
+        'folder_upload_avatar'=>'avatar/',       /*头像目录名*/
+    ],
+
+
 ];
 return array_merge($configs, $runtimeConfig, $service_config);

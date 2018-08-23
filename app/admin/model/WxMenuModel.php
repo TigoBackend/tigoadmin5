@@ -10,9 +10,12 @@ namespace app\admin\model;
 
 
 use think\Model;
+use traits\model\SoftDelete;
 
 class WxMenuModel extends Model
 {
+    use SoftDelete;
+    protected $deleteTime = 'delete_time';
     
     public function get_menus_trees(){
         $rs1 = $this->where(['parent_id'=>0])->order('list_order asc')->select()->jsonSerialize();

@@ -15,4 +15,11 @@ if (file_exists(CMF_ROOT . "data/conf/route.php")) {
     $runtimeRoutes = [];
 }
 
+/*测试接口*/
+\think\Route::rule('test','entry/Entry/test');
+/*404页面*/
+\think\Route::rule('error','entry/View/err');
+/*默认路由*/
+\think\Route::miss('entry/View/err');
+
 return $runtimeRoutes;

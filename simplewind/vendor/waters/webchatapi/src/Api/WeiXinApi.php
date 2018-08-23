@@ -9,6 +9,7 @@ namespace Waters\WebChatApi\Api;
 
 
 use Waters\WebChatApi\Business\InterfaceWeiXinApi;
+use Waters\WebChatApi\Exception\WeiXinException;
 
 class WeiXinApi
 {
@@ -66,13 +67,13 @@ class WeiXinApi
      * WeixinApi constructor.
      * @param array $wx_config    微信配置信息
      * @param InterfaceWeiXinApi|null $interface        自定义业务接口
-     * @throws \Exception
+     * @throws WeiXinException
      */
     public function __construct($wx_config,InterfaceWeiXinApi $interface=null)
     {
         if (!isset($wx_config['app_id']) || !isset($wx_config['app_secret'])) {
             if ($interface) $interface->log('WeixinApi wx_config exception!');
-            throw new \Exception('WeiXinApi wx_config exception!');
+            throw new WeiXinException('WeiXinApi wx_config exception!');
         }
         $this->config = $wx_config;
         $this->business_interface = $interface;
@@ -210,14 +211,14 @@ class WeiXinApi
      * @param string $state    自定义参数,会原样在调地址中添加进去
      * @param string $scope 取值范围 snsapi_userinfo|snsapi_base
      * @param string $process 函数流程控制参数默认为RETURN返回授权链接给外部处理
-     * @throws \Exception
+     * @throws WeiXinException
      * @return string       返回微信网页授权链接|直接重定向到授权链接
      */
     public function get_code($redirect_uri,$state='state',$scope='snsapi_userinfo',$process = 'RETURN'){
         if (empty($scope))$scope='snsapi_userinfo';
         if ($scope !== 'snsapi_userinfo' && $scope !== 'snsapi_base'){
             if ($this->business_interface) $this->business_interface->log('scope exception');
-            throw new \Exception('WeixinApi scope exception!');
+            throw new WeiXinException('WeixinApi scope exception!');
         }
         $redirect_uri = urlencode($redirect_uri);
         $code_url = self::API_AUTH_CODE."appid={$this->config['app_id']}&redirect_uri=$redirect_uri&response_type=code&scope=$scope&state=$state#wechat_redirect";
@@ -608,7 +609,7 @@ class WeiXinApi
      * @param array $header
      * @param bool $multi
      * @return mixed
-     * @throws \Exception
+     * @throws WeiXinException
      */
     protected function multi_curl($url, $params = array(), $method = 'GET', $header = array(), $multi = false) {
         $opts = array (
@@ -635,7 +636,7 @@ class WeiXinApi
                 break;
             default :
                 if ($this->business_interface) $this->business_interface->log('multi_curl wrong request method');
-                throw new \Exception ( '不支持的请求方式！' );
+                throw new WeiXinException( '不支持的请求方式！' );
         }
 
         /* 初始化并执行curl请求 */
@@ -647,7 +648,7 @@ class WeiXinApi
         curl_close ( $ch );
         if ($error){
             if ($this->business_interface) $this->business_interface->log("multi_curl request error:{$error}");
-            throw new \Exception ( '请求发生错误：' . $error );
+            throw new WeiXinException( '请求发生错误：' . $error );
         }
         return $data;
     }
@@ -673,10 +674,10 @@ class WeiXinApi
     /**
      * 检查微信消息回调是否正确
      * @return bool
-     * @throws \Exception
+     * @throws WeiXinException
      */
     private function check_signature(){
-        if (!isset($this->config['token']) || empty($this->config['token'])) throw new \Exception('token is not defined!');
+        if (!isset($this->config['token']) || empty($this->config['token'])) throw new WeiXinException('token is not defined!');
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
@@ -736,10 +737,10 @@ class WeiXinApi
      * 输出xml字符
      * @param $data
      * @return string
-     * @throws \Exception
+     * @throws WeiXinException
      */
     public function to_xml($data){
-        if(!is_array($data) || count($data) <= 0) throw new \Exception('xml data exception!');
+        if(!is_array($data) || count($data) <= 0) throw new WeiXinException('xml data exception!');
         $xml = "<xml>";
         foreach ($data as $key=>$val){
             if (is_numeric($val)){
