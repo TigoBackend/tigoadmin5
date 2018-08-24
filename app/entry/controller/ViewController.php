@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Administrator
+ * User: walters
  * Date: 2018/5/20
  * Time: 16:58
  */
@@ -11,6 +11,12 @@ namespace app\entry\controller;
 
 use cmf\controller\BaseController;
 
+
+/**
+ * 视图控制器
+ * Class ViewController
+ * @package app\entry\controller
+ */
 class ViewController extends BaseController
 {
     protected $is_mobile = false;

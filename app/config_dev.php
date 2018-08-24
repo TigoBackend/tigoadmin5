@@ -253,5 +253,33 @@ $configs = [
     ],
 
 
+    /*接口验证登录配置*/
+    'entry_verify_list'=>[
+
+    ],
+
+    /*JWT TOKEN配置*/
+    'jwt'=>[
+        'key'=>'tigonetwork1521431488',     /*JWT生成/校验token时使用的key*/
+        'secret'=>'tigonetwork',              /*解析JWT用户后校验secret的值*/
+    ],
+
+    /*环信配置*/
+    'hx_config'=>[
+        'client_id'=>'',
+        'client_secret'=>'',
+        'org_name'=>'',
+        'app_name'=>'',
+    ],
+
+    /*友盟配置IOS*/
+    'umeng_config_ios'=>[
+        'app_key'=>'',
+        'umeng_message_secret'=>'',
+        'app_master_secret'=>'',
+        'production_mode'=>false        //ios专用标识,是否正式环境
+    ],
+
+
 ];
 return array_merge($configs, $runtimeConfig, $service_config);

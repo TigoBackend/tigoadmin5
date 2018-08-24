@@ -19,7 +19,11 @@ if (file_exists(CMF_ROOT . "data/conf/route.php")) {
 \think\Route::rule('test','entry/Entry/test');
 /*404页面*/
 \think\Route::rule('error','entry/View/err');
-/*默认路由*/
-\think\Route::miss('entry/View/err');
+
+
+\think\Route::group('entry',function(){
+    /*默认路由*/
+    \think\Route::miss('entry/View/err');
+});
 
 return $runtimeRoutes;

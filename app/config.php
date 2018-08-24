@@ -264,6 +264,34 @@ $configs = [
         'secret'=>'tigonetwork',              /*解析JWT用户后校验secret的值*/
     ],
 
+    /*环信配置*/
+    'hx_config'=>[
+        'client_id'=>'',
+        'client_secret'=>'',
+        'org_name'=>'',
+        'app_name'=>'',
+    ],
+
+    /*友盟配置IOS*/
+    'umeng_config_ios'=>[
+        'app_key'=>'',
+        'umeng_message_secret'=>'',
+        'app_master_secret'=>'',
+        'production_mode'=>false        //ios专用标识,是否正式环境
+    ],
+
+
+    'sms_config'=>[
+        /*阿里大于旧版本配置*/
+        'app_key'=>'',
+        'app_secret'=>'',
+        'free_sign_name'=>'',
+        /*阿里大于新版本配置*/
+        'access_key_id'=>'',
+        'access_key_secret'=>'',
+        'sign_name'=>'',
+    ]
+
 
 ];
 return array_merge($configs, $runtimeConfig, $service_config);
