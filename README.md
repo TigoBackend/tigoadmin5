@@ -245,7 +245,7 @@ function send_message_by_uid($uid,$message){
         }
     }
 ```
-
+2018-8-24 移除api应用，将api应用中的示例代码移到app应用的entry接口示例模块中。集成友盟、环信service。新增微信模板消息批量推送功能。修复后台微信菜单功能
 
 
 
