@@ -280,6 +280,29 @@ $configs = [
         'production_mode'=>false        //ios专用标识,是否正式环境
     ],
 
+    'sms_config'=>[
+        /*阿里大于旧版本配置*/
+        'app_key'=>'',
+        'app_secret'=>'',
+        'free_sign_name'=>'',
+        /*阿里大于新版本配置*/
+        'access_key_id'=>'',
+        'access_key_secret'=>'',
+        'sign_name'=>'',
+    ],
+
+    /*redis配置*/
+    "redis_config" => [
+        'host'       => '127.0.0.1',
+        'port'       => 6379,
+        'password'   => '',
+        'select'     => 0,
+        'timeout'    => 1,
+        'expire'     => 0,
+        'persistent' => false,
+        'prefix'     => '',
+    ],
+
 
 ];
 return array_merge($configs, $runtimeConfig, $service_config);

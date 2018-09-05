@@ -290,7 +290,19 @@ $configs = [
         'access_key_id'=>'',
         'access_key_secret'=>'',
         'sign_name'=>'',
-    ]
+    ],
+
+    /*redis配置*/
+    "redis_config" => [
+        'host'       => '127.0.0.1',
+        'port'       => 6379,
+        'password'   => '',
+        'select'     => 0,
+        'timeout'    => 1,
+        'expire'     => 0,
+        'persistent' => false,
+        'prefix'     => '',
+    ],
 
 
 ];

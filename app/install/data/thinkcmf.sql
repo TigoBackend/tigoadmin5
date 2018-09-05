@@ -4905,4 +4905,22 @@ INSERT INTO `cmf_admin_menu` VALUES ('163', '0', '1', '1', '10000', 'Admin', 'Lo
 --
 -- 2017-11-22 09:22 添加管理员操作日志权限 jewey
 --
-INSERT INTO `cmf_auth_rule` VALUES ('162', '1', 'admin', 'admin_url', 'Admin/Log/index', '', '操作日志', '')
+INSERT INTO `cmf_auth_rule` VALUES ('162', '1', 'admin', 'admin_url', 'Admin/Log/index', '', '操作日志', '');
+
+--
+-- 微信用户表
+--
+CREATE TABLE `tg_user_wx` (
+  `uw_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '记录id',
+  `uw_nickname` varchar(255) NOT NULL DEFAULT '' COMMENT '微信昵称',
+  `uw_avatar` varchar(1000) NOT NULL DEFAULT '' COMMENT '微信头像',
+  `uw_sex` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '性别 0-未知 1-男 2-女',
+  `uw_subscribe` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否已关注公众号 0-未关注 1-已关注',
+  `uw_app_id` varchar(255) NOT NULL DEFAULT '' COMMENT 'open_id对应的公众号app_id',
+  `uw_open_id` varchar(255) NOT NULL DEFAULT '' COMMENT '微信open_id',
+  `uw_union_id` varchar(255) NOT NULL DEFAULT '' COMMENT '微信union_id',
+  `ctime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `delete_time` int(10) unsigned DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`uw_id`),
+  KEY `app_open_id` (`uw_app_id`(191),`uw_open_id`(191),`delete_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信用户表';

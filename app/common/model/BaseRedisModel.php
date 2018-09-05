@@ -60,4 +60,11 @@ class BaseRedisModel extends Model
     }
 
 
+
+    public function refresh_cache_record($record = []){}
+
+
+
+
+
 }
