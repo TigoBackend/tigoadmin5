@@ -9,16 +9,19 @@
 namespace app\entry\controller;
 
 
-use app\common\model\UserWxModel;
+use app\common\lib\exception\MyException;
 
 class EntryController extends EntryBaseController
 {
 
 
     public function test(){
-        $uw_model = new UserWxModel();
-        dump($uw_model->getPk());
-        $this->success('test');
+        try{
+            $this->success('test');
+        }catch (MyException $e){
+            handle_exception($e);
+            $this->error(['msg'=>$e->getMessage(),'code'=>$e->getCode()]);
+        }
     }
 
 

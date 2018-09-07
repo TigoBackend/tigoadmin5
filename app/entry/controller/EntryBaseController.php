@@ -15,17 +15,13 @@ use Firebase\JWT\JWT;
 class EntryBaseController extends BaseApiController
 {
 
-    /*经纪人实例*/
-    protected $user_agent;
-    /*用户实例*/
-    protected $user_customer;
 
     /**
      * 初始化经纪人验证
      */
     public function _initialize()
     {
-        
+
         parent::_initialize();
         /*解析token*/
         $this->parse_token();

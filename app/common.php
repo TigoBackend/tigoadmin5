@@ -14,12 +14,12 @@
  * @param string $folder 要保存日志的文件夹路径
  */
 function handle_exception(Exception $e,$folder=null){
-    if (!$folder)$folder = 'public/log/exception/';
+    if (!$folder)$folder = 'exception'.DS;
     if ($e instanceof \app\common\lib\exception\MyException && ($e->getLevel() >= \app\common\lib\exception\MyException::EXCEPTION_LEVEL_LOG || \think\Config::get('app_debug'))) {
-        \think\Log::init(['type' => 'File', 'path' => ROOT_PATH . $folder, 'file_size' => 2097152, 'time_format' => 'c']);
+        \think\Log::init(['type' => 'File', 'path' => LOG_PATH . $folder, 'file_size' => 2097152, 'time_format' => 'c']);
         \think\Log::record($e->getMyMessage());
     } elseif ($e instanceof Exception) {
-        \think\Log::init(['type' => 'File', 'path' => ROOT_PATH . $folder, 'file_size' => 2097152, 'time_format' => 'c']);
+        \think\Log::init(['type' => 'File', 'path' => LOG_PATH . $folder, 'file_size' => 2097152, 'time_format' => 'c']);
         \think\Log::record($e->getTraceAsString());
         \think\Log::record($e->getMessage());
     }
@@ -33,7 +33,7 @@ function handle_exception(Exception $e,$folder=null){
 function add_log($msg='',$folder=null){
     if (!$folder)$folder = 'public/log/exception/';
     if ($msg){
-        \think\Log::init(['type' => 'File', 'path' => ROOT_PATH . $folder, 'file_size' => 2097152, 'time_format' => 'c']);
+        \think\Log::init(['type' => 'File', 'path' => LOG_PATH . $folder, 'file_size' => 2097152, 'time_format' => 'c']);
         \think\Log::record($msg);
     }
 }
