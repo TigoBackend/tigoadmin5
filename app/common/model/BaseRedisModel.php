@@ -94,7 +94,7 @@ abstract class BaseRedisModel extends Model
      * @return bool
      */
     private function can_redis(){
-        return $this->use_redis && $this->can_redis;
+        return self::$redis instanceof Redis && $this->use_redis && $this->can_redis;
     }
 
 
