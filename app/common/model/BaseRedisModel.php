@@ -67,6 +67,9 @@ abstract class BaseRedisModel extends Model
         protected $fields_default = [];
 
 
+        static $redis = null;
+
+
     public function __construct($data = [])
     {
         parent::__construct($data);
@@ -74,7 +77,8 @@ abstract class BaseRedisModel extends Model
             $class_name = basename(str_replace('\\','/',get_class()));
             $class_name  = $class_name ? $class_name : get_class();
             $this->record_key_prefix = "{$class_name}:";
-            if (RedisCache::connect()->ping()) $this->can_redis = true;
+            if (empty(self::$redis)) self::$redis = RedisCache::connect();
+            if (self::$redis->ping()) $this->can_redis = true;
         }catch (\Exception $e){
             $this->can_redis = false;
         }
@@ -114,7 +118,7 @@ abstract class BaseRedisModel extends Model
     public function refresh_cache_record($record = []){
         if (!$this->can_redis() || !isset($record[$this->getPk()]) || empty($record[$this->getPk()])) return false;
         /*刷新缓存*/
-        RedisCache::connect()->hMset($this->record_key_prefix.$record[$this->getPk()],$record);
+        self::$redis->hMset($this->record_key_prefix.$record[$this->getPk()],$record);
         /*自定义额外业务*/
         if (method_exists($this,'refresh_cache_record_callback')) $this->refresh_cache_record_callback($record);
         return true;
@@ -130,7 +134,7 @@ abstract class BaseRedisModel extends Model
     public function drop_cache_record($id = 0){
         if (!$this->can_redis() || empty($id)) return false;
         /*移除缓存*/
-        RedisCache::connect()->del($this->record_key_prefix.$id);
+        self::$redis->del($this->record_key_prefix.$id);
         /*自定义额外业务*/
         if (method_exists($this,'drop_cache_record_callback')) $this->drop_cache_record_callback($id);
         return true;
@@ -209,7 +213,7 @@ abstract class BaseRedisModel extends Model
      */
     public function get_record($id = 0,$fields = []){
         if ($this->can_redis()){
-            $record = RedisCache::connect()->hGetAll($this->record_key_prefix.$id);
+            $record = self::$redis->hGetAll($this->record_key_prefix.$id);
             if (empty($record)){
                 $record = $this->get_record_data($id);
                 if ($record) $this->refresh_cache_record($record);
