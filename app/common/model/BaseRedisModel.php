@@ -11,6 +11,7 @@ namespace app\common\model;
 
 use think\Model;
 use think\RedisCache;
+use think\cache\driver\Redis;
 
 abstract class BaseRedisModel extends Model
 {
@@ -66,7 +67,10 @@ abstract class BaseRedisModel extends Model
      */
         protected $fields_default = [];
 
-
+    /**
+     * redis实例
+     * @var null|Redis
+     */
         static $redis = null;
 
 
