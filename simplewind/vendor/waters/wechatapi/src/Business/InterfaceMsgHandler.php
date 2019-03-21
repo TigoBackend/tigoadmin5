@@ -6,14 +6,14 @@
  * Date: 2017/3/31
  * Time: 9:28
  */
-namespace Waters\WebChatApi\Business;
+namespace Waters\WeiXin\Business;
 
-use Waters\WebChatApi\Msg\WxMsgClick;
-use Waters\WebChatApi\Msg\WxMsgLocation;
-use Waters\WebChatApi\Msg\WxMsgScan;
-use Waters\WebChatApi\Msg\WxMsgSubscribe;
-use Waters\WebChatApi\Msg\WxMsgView;
-use Waters\WebChatApi\Msg\WxRespTextMessage;
+use Waters\WeiXin\Msg\WxMsgClick;
+use Waters\WeiXin\Msg\WxMsgLocation;
+use Waters\WeiXin\Msg\WxMsgScan;
+use Waters\WeiXin\Msg\WxMsgSubscribe;
+use Waters\WeiXin\Msg\WxMsgView;
+use Waters\WeiXin\Msg\WxRespTextMessage;
 
 interface InterfaceMsgHandler
 {

@@ -1,0 +1,17 @@
+{
+  "name":"waters/wechatapi",
+  "description":"Wei Xin library",
+  "keywords":["WeChat"],
+  "homepage":"https://github.com/dogyford/wechatapi",
+  "type":"library",
+  "license":"MIT",
+  "authors":[
+    {
+      "name":"Waters Fong",
+      "email":"27279983@qq.com"
+    }
+  ],
+  "autoload":{
+    "psr-4":{"Waters\\WeiXin\\":"src/"}
+  }
+}

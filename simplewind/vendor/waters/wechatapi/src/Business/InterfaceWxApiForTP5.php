@@ -9,7 +9,7 @@
  * Time: 16:52
  *
  */
-namespace Waters\WebChatApi\Business;
+namespace Waters\WeiXin\Business;
 
 class InterfaceWxApiForTP5 implements InterfaceWeiXinApi
 {

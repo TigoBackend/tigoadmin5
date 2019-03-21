@@ -6,9 +6,9 @@
  * Date: 2017/3/30
  * Time: 21:30
  */
-namespace Waters\WebChatApi\Msg;
+namespace Waters\WeiXin\Msg;
 
-use Waters\WebChatApi\Business\InterfaceMsgHandler;
+use Waters\WeiXin\Business\InterfaceMsgHandler;
 
 class WxMsgHandler
 {

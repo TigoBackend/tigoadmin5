@@ -6,10 +6,10 @@
  * Date: 2017/4/17
  * Time: 17:01
  */
-namespace Waters\WebChatApi\Api;
+namespace Waters\WeiXin\Api;
 
-use Waters\WebChatApi\Business\InterfacePay;
-use Waters\WebChatApi\Business\InterfaceWeiXinApi;
+use Waters\WeiXin\Business\InterfacePay;
+use Waters\WeiXin\Business\InterfaceWeiXinApi;
 
 class WeiXinPayApi extends WeiXinApi
 {
@@ -303,6 +303,9 @@ class WeiXinPayApi extends WeiXinApi
         }
     }
 
+    private function check(){
+        return true;
+    }
 
     
 

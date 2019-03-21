@@ -27,7 +27,7 @@ class ComposerStaticInit929fb365b9981d29459d58f676689cf7
         'W' => 
         array (
             'Workerman\\' => 10,
-            'Waters\\WebChatApi\\' => 18,
+            'Waters\\WeiXin\\' => 14,
         ),
         'Q' => 
         array (
@@ -68,9 +68,9 @@ class ComposerStaticInit929fb365b9981d29459d58f676689cf7
         array (
             0 => __DIR__ . '/..' . '/workerman/workerman-for-win',
         ),
-        'Waters\\WebChatApi\\' => 
+        'Waters\\WeiXin\\' => 
         array (
-            0 => __DIR__ . '/..' . '/waters/webchatapi/src',
+            0 => __DIR__ . '/..' . '/waters/wechatapi/src',
         ),
         'Qiniu\\' => 
         array (

@@ -5,53 +5,27 @@
  * Date: 2017/2/6
  * Time: 17:34
  */
-namespace Waters\WebChatApi\Api;
+namespace Waters\WeiXin\Api;
 
 
-use Waters\WebChatApi\Business\InterfaceWeiXinApi;
+use Waters\WeiXin\Business\InterfaceWeiXinApi;
 
 abstract class WeiXinTemplate
 {
 
-    /**
-     * @var array
-     */
     protected $wx_config;
 
-    /**
-     * @var string
-     */
     protected $touser;
 
-    /**
-     * 批量接收模板消息的用户openid列表
-     * @var array
-     */
-    protected $touser_list = [];
-
-    /**
-     * @var string
-     */
     protected $template_id;
 
-    /**
-     * @var string
-     */
     protected $url;
 
     /*该属性已过期*/
     protected $topcolor;
 
-    /**
-     * 模板内容
-     * @var array
-     */
     protected $data;
 
-    /**
-     * 业务接口
-     * @var null|InterfaceWeiXinApi
-     */
     protected $business_interface;
 
 
@@ -64,17 +38,10 @@ abstract class WeiXinTemplate
     function __construct($option,InterfaceWeiXinApi $interface=null)
     {
         $this->wx_config = $option['wx_config'];
-        if (is_string($option['open_id'])){
-            $this->touser = $option['open_id'];
-            $this->touser_list = [$option['open_id']];
-        }elseif (is_array($option['open_id'])){
-            $this->touser = $option['open_id'][0];
-            $this->touser_list = $option['open_id'];
-        }
+        $this->touser = $option['open_id'];
         $this->url = $option['url'];
-        $this->data = isset($option['data']) && $option['data'] ? $option['data'] : [];
+        $this->data = $option['data'];
         $this->business_interface = $interface;
-        $this->template_id = isset($option['template_id']) && $option['template_id'] ? $option['template_id'] : '';
     }
 
     /**
@@ -145,18 +112,6 @@ abstract class WeiXinTemplate
         );
     }
 
-
-    /**
-     * 获取微信用户openid列表
-     * @return array
-     */
-    public function get_touser_list(){
-        return $this->touser_list;
-    }
-
-
-
-
     /**
      * 向微信服务器发送信息模板请求
      * @return bool|mixed
@@ -167,17 +122,8 @@ abstract class WeiXinTemplate
         return $result;
     }
 
-
-    /**
-     * 同一模板消息批量发送给指定用户列表（touser_list）
-     * @return bool
-     */
-    public function multiSendTemplateMsg(){
-        $templateApi = new WeiXinMsgTemplateApi($this->wx_config,$this->business_interface);
-        $result = $templateApi->multiSendTemplateMsg($this);
-        return $result;
+    private function check(){
+        return true;
     }
-
-
 
 }

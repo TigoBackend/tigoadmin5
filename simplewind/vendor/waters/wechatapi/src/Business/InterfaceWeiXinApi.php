@@ -5,7 +5,7 @@
  * Date: 2017/2/6
  * Time: 15:39
  */
-namespace Waters\WebChatApi\Business;
+namespace Waters\WeiXin\Business;
 
 interface InterfaceWeiXinApi
 {

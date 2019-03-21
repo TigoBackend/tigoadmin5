@@ -6,7 +6,7 @@
  * Date: 2017/4/17
  * Time: 17:05
  */
-namespace Waters\WebChatApi\Business;
+namespace Waters\WeiXin\Business;
 
 interface InterfacePay
 {

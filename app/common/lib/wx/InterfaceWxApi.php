@@ -10,7 +10,7 @@ namespace app\common\lib\wx;
 
 
 use think\RedisCache;
-use Waters\WebChatApi\Business\InterfaceWxApiForTP5;
+use Waters\WeiXin\Business\InterfaceWxApiForTP5;
 
 class InterfaceWxApi extends InterfaceWxApiForTP5
 {

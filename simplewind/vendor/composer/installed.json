@@ -602,26 +602,26 @@
         "description": "The ThinkPHP5 Image Package"
     },
     {
-        "name": "waters/webchatapi",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
+        "name": "waters/wechatapi",
+        "version": "v1.0.3",
+        "version_normalized": "1.0.3.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/dogyford/WebChatApi.git",
-            "reference": "ad8cfe3b0a72d6886afbf6e72f97075e00831eae"
+            "url": "https://github.com/dogyford/wechatapi.git",
+            "reference": "7f4f6fba6009e3949d603775114ffbe19ccae61b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/dogyford/WebChatApi/zipball/ad8cfe3b0a72d6886afbf6e72f97075e00831eae",
-            "reference": "ad8cfe3b0a72d6886afbf6e72f97075e00831eae",
+            "url": "https://api.github.com/repos/dogyford/wechatapi/zipball/7f4f6fba6009e3949d603775114ffbe19ccae61b",
+            "reference": "7f4f6fba6009e3949d603775114ffbe19ccae61b",
             "shasum": ""
         },
-        "time": "2017-09-28T09:07:59+00:00",
+        "time": "2019-03-19T07:38:17+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Waters\\WebChatApi\\": "src/"
+                "Waters\\WeiXin\\": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -634,11 +634,10 @@
                 "email": "27279983@qq.com"
             }
         ],
-        "description": "TiGo Wei Xin library",
-        "homepage": "https://github.com/dogyford/WxApi",
+        "description": "Wei Xin library",
+        "homepage": "https://github.com/dogyford/wechatapi",
         "keywords": [
-            "Webchat",
-            "tigo"
+            "wechat"
         ]
     },
     {

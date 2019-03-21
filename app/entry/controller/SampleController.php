@@ -10,17 +10,17 @@ namespace app\entry\controller;
 use app\common\lib\exception\MyException;
 use app\common\lib\wx\InterfaceMsg;
 use app\common\lib\wx\InterfaceWxApi;
+use app\common\lib\wx\MsgTemplate;
 use Qiniu\Auth;
 use Qiniu\Processing\ImageUrlBuilder;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 use think\RedisCache;
 use think\Request;
-use Waters\WebChatApi\Api\MsgTemplate;
-use Waters\WebChatApi\Api\WeiXinApi;
-use Waters\WebChatApi\Api\WeiXinMsgTemplateApi;
-use Waters\WebChatApi\Exception\WeiXinException;
-use Waters\WebChatApi\Msg\WxMsgHandler;
+use Waters\WeiXin\Api\WeiXinApi;
+use Waters\WeiXin\Exception\WeiXinException;
+use Waters\WeiXin\Msg\WxMsgHandler;
+
 
 /**
  * 实例代码控制器（参考代码用）
@@ -446,6 +446,7 @@ class SampleController extends EntryBaseController
 
     /**
      * 微信分享
+     * @throws \Exception
      */
     public function share(){
         try{
@@ -561,7 +562,6 @@ class SampleController extends EntryBaseController
             $template_config = [
                 'wx_config'=>$wx_config,
                 'open_id'=>'用户openid',
-                'template_id'=>'模板id',
                 'url'=>'模板消息点击跳转链接',
                 'data'=>[
                     'first'=>['value'=>''],
@@ -572,6 +572,7 @@ class SampleController extends EntryBaseController
             ];
             $interface = new InterfaceWxApi($wx_config['app_id']);
             $template = new MsgTemplate($template_config,$interface);
+            $template->set_template_id('模板id');
             $template->sendTemplateMsg();
             $this->success('success');
         }catch (WeiXinException $e){
@@ -584,68 +585,68 @@ class SampleController extends EntryBaseController
      * 同一模板消息批量发送给指定用户列表
      * 适用于固定内容的模板消息批量发送给多个用户
      */
-    public function template_multi_send(){
-        try{
-            $wx_config = config('wx_config');
-            $template_option = [
-                'wx_config'=>$wx_config,
-                'open_id'=>['openid1','openid2','openid3','openid4','openid5','openid6'],
-                'template_id'=>'模板id',
-                'url'=>'模板消息点击跳转链接',
-                'data'=>[
-                    'first'=>['value'=>''],
-                    'keyword1'=>['value'=>''],
-                    'keyword2'=>['value'=>''],
-                    'remark'=>['value'=>''],
-                ],
-            ];
-            $interface = new InterfaceWxApi($wx_config['app_id']);
-            $template = new MsgTemplate($template_option,$interface);
-            $template->multiSendTemplateMsg();
-            $this->success('success');
-        }catch (WeiXinException $e){
-            handle_exception($e,'public/log/wx/');
-            $this->error($e->getMessage());
-        }
-    }
+//    public function template_multi_send(){
+//        try{
+//            $wx_config = config('wx_config');
+//            $template_option = [
+//                'wx_config'=>$wx_config,
+//                'open_id'=>['openid1','openid2','openid3','openid4','openid5','openid6'],
+//                'template_id'=>'模板id',
+//                'url'=>'模板消息点击跳转链接',
+//                'data'=>[
+//                    'first'=>['value'=>''],
+//                    'keyword1'=>['value'=>''],
+//                    'keyword2'=>['value'=>''],
+//                    'remark'=>['value'=>''],
+//                ],
+//            ];
+//            $interface = new InterfaceWxApi($wx_config['app_id']);
+//            $template = new MsgTemplate($template_option,$interface);
+//            $template->multiSendTemplateMsg();
+//            $this->success('success');
+//        }catch (WeiXinException $e){
+//            handle_exception($e,'public/log/wx/');
+//            $this->error($e->getMessage());
+//        }
+//    }
 
 
     /**
      * 批量发送多个模板消息
      * 适用于多个（相同或不同）模板消息的批量发送
      */
-    public function multi_template_send(){
-        try{
-            $openid_list = ['openid1','openid2','openid3','openid4','openid5','openid6'];
-            $wx_config = config('wx_config');
-            $template_option_list = [];
-            foreach ($openid_list as $openid){
-                $template_option_list[] = [
-                    'wx_config'=>$wx_config,
-                    'open_id'=>$openid,
-                    'template_id'=>'模板id',
-                    'url'=>'模板消息点击跳转链接',
-                    'data'=>[
-                        'first'=>['value'=>''],
-                        'keyword1'=>['value'=>''],
-                        'keyword2'=>['value'=>''],
-                        'remark'=>['value'=>''],
-                    ],
-                ];
-            }
-            $template_list = [];
-            $interface = new InterfaceWxApi($wx_config['app_id']);
-            foreach ($template_option_list as $option){
-                $template_list[] = new MsgTemplate($option);
-            }
-            $api = new WeiXinMsgTemplateApi($wx_config,$interface);
-            $api->multiSendWeiXinTemplate($template_list);
-            
-        }catch (WeiXinException $e){
-            handle_exception($e,'public/log/wx/');
-            $this->error($e->getMessage());
-        }
-    }
+//    public function multi_template_send(){
+//        try{
+//            $openid_list = ['openid1','openid2','openid3','openid4','openid5','openid6'];
+//            $wx_config = config('wx_config');
+//            $template_option_list = [];
+//            foreach ($openid_list as $openid){
+//                $template_option_list[] = [
+//                    'wx_config'=>$wx_config,
+//                    'open_id'=>$openid,
+//                    'template_id'=>'模板id',
+//                    'url'=>'模板消息点击跳转链接',
+//                    'data'=>[
+//                        'first'=>['value'=>''],
+//                        'keyword1'=>['value'=>''],
+//                        'keyword2'=>['value'=>''],
+//                        'remark'=>['value'=>''],
+//                    ],
+//                ];
+//            }
+//            $template_list = [];
+//            $interface = new InterfaceWxApi($wx_config['app_id']);
+//            foreach ($template_option_list as $option){
+//                $template_list[] = new MsgTemplate($option);
+//            }
+//            $api = new WeiXinMsgTemplateApi($wx_config,$interface);
+//            $api->multiSendWeiXinTemplate($template_list);
+//
+//        }catch (WeiXinException $e){
+//            handle_exception($e,'public/log/wx/');
+//            $this->error($e->getMessage());
+//        }
+//    }
 
 
 

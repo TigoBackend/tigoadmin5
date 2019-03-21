@@ -5,11 +5,11 @@
  * Date: 2017/2/6
  * Time: 15:26
  */
-namespace Waters\WebChatApi\Api;
+namespace Waters\WeiXin\Api;
 
 
-use Waters\WebChatApi\Business\InterfaceWeiXinApi;
-use Waters\WebChatApi\Exception\WeiXinException;
+use Waters\WeiXin\Business\InterfaceWeiXinApi;
+use Waters\WeiXin\Exception\WeiXinException;
 
 class WeiXinApi
 {
@@ -50,14 +50,6 @@ class WeiXinApi
     const API_CREATE_CUSTOM_MENU = 'https://api.weixin.qq.com/cgi-bin/menu/create?';
     /*获取自定义菜单*/
     const API_GET_CUSTOM_MENU = 'https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?';
-    /*生成带参数的二维码*/
-    const API_QRCODE_CREATE = 'https://api.weixin.qq.com/cgi-bin/qrcode/create?';
-    /*通过ticket换取二维码*/
-    const API_SHOW_QRCODE = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?';
-    /*新增临时素材*/
-    const API_UPLOAD_TMP = 'https://api.weixin.qq.com/cgi-bin/media/upload?';
-    /*客服接口-发消息*/
-    const API_CUSTOM_SEND = 'https://api.weixin.qq.com/cgi-bin/message/custom/send?';
 
     protected $business_interface;
     protected $config;
@@ -67,13 +59,13 @@ class WeiXinApi
      * WeixinApi constructor.
      * @param array $wx_config    微信配置信息
      * @param InterfaceWeiXinApi|null $interface        自定义业务接口
-     * @throws WeiXinException
+     * @throws \Exception
      */
     public function __construct($wx_config,InterfaceWeiXinApi $interface=null)
     {
         if (!isset($wx_config['app_id']) || !isset($wx_config['app_secret'])) {
             if ($interface) $interface->log('WeixinApi wx_config exception!');
-            throw new WeiXinException('WeiXinApi wx_config exception!');
+            throw new \Exception('WeiXinApi wx_config exception!');
         }
         $this->config = $wx_config;
         $this->business_interface = $interface;
@@ -211,14 +203,14 @@ class WeiXinApi
      * @param string $state    自定义参数,会原样在调地址中添加进去
      * @param string $scope 取值范围 snsapi_userinfo|snsapi_base
      * @param string $process 函数流程控制参数默认为RETURN返回授权链接给外部处理
-     * @throws WeiXinException
+     * @throws \Exception
      * @return string       返回微信网页授权链接|直接重定向到授权链接
      */
     public function get_code($redirect_uri,$state='state',$scope='snsapi_userinfo',$process = 'RETURN'){
         if (empty($scope))$scope='snsapi_userinfo';
         if ($scope !== 'snsapi_userinfo' && $scope !== 'snsapi_base'){
             if ($this->business_interface) $this->business_interface->log('scope exception');
-            throw new WeiXinException('WeixinApi scope exception!');
+            throw new \Exception('WeixinApi scope exception!');
         }
         $redirect_uri = urlencode($redirect_uri);
         $code_url = self::API_AUTH_CODE."appid={$this->config['app_id']}&redirect_uri=$redirect_uri&response_type=code&scope=$scope&state=$state#wechat_redirect";
@@ -346,160 +338,6 @@ class WeiXinApi
     /*-------------------------------------------------自定义菜单end--------------------------------------------------------------------*/
 
 
-    /*-------------------------------------------------生成带参数的二维码start--------------------------------------------------------------------*/
-
-    /**
-     * 生成带参数的二维码
-     * @Author   YHX
-     * @DateTime 2017-08-28T10:45:36+0800
-     * @return   [type]                   [description]
-     */
-    public function create_qrcode_code($param){
-        if (!$param){
-            if ($this->business_interface) $this->business_interface->log('create_qrcode_code param is null');
-            return false;
-        }
-        $access_token = $this->get_access_token();
-        if (!$access_token){
-            if ($this->business_interface) $this->business_interface->log('create_qrcode_code access_token is null');
-            return false;
-        }
-
-        $json = json_encode($param,JSON_UNESCAPED_UNICODE);
-        $json = urldecode($json);
-        $headers = [
-            'Content-Type: application/json',
-            'Content_Length: '.strlen($json),
-        ];
-        $url = self::API_QRCODE_CREATE."access_token={$access_token}";
-        $result = $this->multi_curl($url,$json,self::CURL_REQUEST_METHOD_POST,$headers,true);
-        if(!$result){
-            if ($this->business_interface) $this->business_interface->log('create_qrcode_code result is null');
-            return false;
-        }
-        $result = json_decode($result,true);
-        add_log($access_token);
-        add_log($result);
-        //通过ticket换取二维码
-        $ticket = urlencode($result['ticket']);
-        $qrcode = self::API_SHOW_QRCODE."ticket={$ticket}";
-
-        return $qrcode;
-    }
-
-
-    /*-------------------------------------------------生成带参数的二维码end--------------------------------------------------------------------*/
-
-
-    /*-------------------------------------------------上传临时素材start--------------------------------------------------------------------*/
-
-    /**
-     * 上传临时素材
-     * @Author   YHX
-     * @DateTime 2017-08-29T15:50:43+0800
-     * @param    [type]                   $path  [资源路径]
-     * @param    [type]                   $type  [资源类型]
-     * @return   [type]                          [description]
-     */
-    public function upload_tmp_media($path,$type){
-        if (!$type){
-            if ($this->business_interface) $this->business_interface->log('upload_tmp_media type is null');
-            return false;
-        }
-        if (!$path){
-            if ($this->business_interface) $this->business_interface->log('upload_tmp_media path is null');
-            return false;
-        }
-        $access_token = $this->get_access_token();
-        if (!$access_token){
-            if ($this->business_interface) $this->business_interface->log('upload_tmp_media access_token is null');
-            return false;
-        }
-
-        // $json = json_encode($path,JSON_UNESCAPED_UNICODE);
-        // $json = urldecode($json);
-        // $headers = [
-        //     'Content-Type: text/plain',
-        //     'Content_Length: '.strlen($json),
-        // ];
-        
-        // dump($path);die();
-        if(version_compare("5.0", PHP_VERSION, "<")) {
-            $media = new \CURLFile($path);
-            $param = ['media'=>$media];
-        }else{
-            $param = ["@".$path];
-        }
-        $url = self::API_UPLOAD_TMP."access_token={$access_token}&type={$type}";
-        $result = $this->multi_curl($url,$param,self::CURL_REQUEST_METHOD_POST,[],true);
-        if(!$result){
-            if ($this->business_interface) $this->business_interface->log('upload_tmp_media result is null');
-            return false;
-        }
-
-        $result = json_decode($result,true);
-
-        return $result;
-    }
-
-    /*-------------------------------------------------上传临时素材end--------------------------------------------------------------------*/
-
-
-    /*-------------------------------------------------客服接口-发消息start--------------------------------------------------------------------*/
-
-    /**
-     * 客服接口-发消息
-     * @Author   YHX
-     * @DateTime 2017-08-30T10:28:05+0800
-     * @param    [type]                   $openid [接收人openid]
-     * @param    [type]                   $type   [消息类型]
-     * @param    [type]                   $param  [消息内容] 格式参考:https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140547
-     * @return   [type]                           [description]
-     */
-    public function custom_send($openid,$type,$param){
-        if (!$openid){
-            if ($this->business_interface) $this->business_interface->log('custom_send openid is null');
-            return false;
-        }
-        if (!$type){
-            if ($this->business_interface) $this->business_interface->log('custom_send type is null');
-            return false;
-        }
-        if (!$param){
-            if ($this->business_interface) $this->business_interface->log('custom_send param is null');
-            return false;
-        }
-        $access_token = $this->get_access_token();
-        if (!$access_token){
-            if ($this->business_interface) $this->business_interface->log('custom_send access_token is null');
-            return false;
-        }
-
-        $data['touser'] = $openid;
-        $data['msgtype'] = $type;
-        $data[$type] = $param;
-
-        $json = json_encode($data,JSON_UNESCAPED_UNICODE);
-        $json = urldecode($json);
-        $headers = [
-            'Content-Type: application/json',
-            'Content_Length: '.strlen($json),
-        ];
-
-        $url = self::API_CUSTOM_SEND."access_token={$access_token}";
-        $result = $this->multi_curl($url,$json,self::CURL_REQUEST_METHOD_POST,$headers,true);
-        if(!$result){
-            if ($this->business_interface) $this->business_interface->log('custom_send result is null');
-            return false;
-        }
-
-        $result = json_decode($result,true);
-
-        return $result;
-    }
-
-    /*-------------------------------------------------客服接口-发消息end--------------------------------------------------------------------*/
-
 
     /**
      * 刷新微信普通access_token并保存到缓存各自的机制中(如果business_interface有实现的话)
@@ -577,10 +415,10 @@ class WeiXinApi
      * 特殊的curl方法，该方法专用于微信接口访问并获取结果
      * 该方法适用于返回数据以json方式返回的微信接口
      * @param $url
-     * @param array $data
+     * @param array|string $data
      * @return mixed
      */
-    protected function curl($url  , $data = array()){
+    protected function curl($url  , $data = []){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_TIMEOUT, 3);
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -588,18 +426,30 @@ class WeiXinApi
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $reponse = curl_exec($ch);
+        if ($data) curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $response = curl_exec($ch);
         curl_close($ch);
-        $result =  json_decode($reponse , true);
+        $result =  json_decode($response , true);
 
         //因access_token失效导致访问失败，重新access_token再试一次
         /*if($result['errcode'] == 40001 || $result['errcode'] == 40014 ||$result['errcode'] == 42001){
 
         }*/
-        return $result;
+        return $result ? $result : $response;
     }
 
+    /**
+     * 封装curl file
+     * @param $file
+     * @return \CURLFile
+     * @throws WeiXinException
+     */
+    protected function makeCurlFile($file){
+        if (!is_file($file)) $this->throwException('file not exist',['file'=>$file]);
+        $mime = mime_content_type($file);
+        $info = pathinfo($file);
+        return new \CURLFile($file,$mime,$info['basename']);
+    }
 
     /**
      * 多功能curl请求
@@ -609,7 +459,7 @@ class WeiXinApi
      * @param array $header
      * @param bool $multi
      * @return mixed
-     * @throws WeiXinException
+     * @throws \Exception
      */
     protected function multi_curl($url, $params = array(), $method = 'GET', $header = array(), $multi = false) {
         $opts = array (
@@ -636,7 +486,7 @@ class WeiXinApi
                 break;
             default :
                 if ($this->business_interface) $this->business_interface->log('multi_curl wrong request method');
-                throw new WeiXinException( '不支持的请求方式！' );
+                throw new \Exception ( '不支持的请求方式！' );
         }
 
         /* 初始化并执行curl请求 */
@@ -648,7 +498,7 @@ class WeiXinApi
         curl_close ( $ch );
         if ($error){
             if ($this->business_interface) $this->business_interface->log("multi_curl request error:{$error}");
-            throw new WeiXinException( '请求发生错误：' . $error );
+            throw new \Exception ( '请求发生错误：' . $error );
         }
         return $data;
     }
@@ -674,10 +524,10 @@ class WeiXinApi
     /**
      * 检查微信消息回调是否正确
      * @return bool
-     * @throws WeiXinException
+     * @throws \Exception
      */
     private function check_signature(){
-        if (!isset($this->config['token']) || empty($this->config['token'])) throw new WeiXinException('token is not defined!');
+        if (!isset($this->config['token']) || empty($this->config['token'])) throw new \Exception('token is not defined!');
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
@@ -737,10 +587,10 @@ class WeiXinApi
      * 输出xml字符
      * @param $data
      * @return string
-     * @throws WeiXinException
+     * @throws \Exception
      */
     public function to_xml($data){
-        if(!is_array($data) || count($data) <= 0) throw new WeiXinException('xml data exception!');
+        if(!is_array($data) || count($data) <= 0) throw new \Exception('xml data exception!');
         $xml = "<xml>";
         foreach ($data as $key=>$val){
             if (is_numeric($val)){
@@ -836,6 +686,17 @@ class WeiXinApi
             },
             $str);
         return $str;
+    }
+
+    /**
+     * 抛出异常
+     * @param string $message
+     * @param array $context
+     * @throws WeiXinException
+     */
+    protected function throwException($message = '',$context = []){
+        if ($this->business_interface) $this->business_interface->log($message." context : ".json_encode($context));
+        throw new WeiXinException($message,$context);
     }
 
 

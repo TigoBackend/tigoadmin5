@@ -1,4 +1,4 @@
-# WxApi(web chat api library)
+# WxApi(wechat api library)
 
 自定义微信公众号开发api类库
 

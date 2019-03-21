@@ -9,15 +9,15 @@
 namespace app\common\lib\wx;
 
 use think\Db;
-use Waters\WebChatApi\Api\WeiXinApi;
-use Waters\WebChatApi\Business\InterfaceMsgHandler;
-use Waters\WebChatApi\Business\InterfaceWxApiForTP5;
-use Waters\WebChatApi\Msg\WxMsgClick;
-use Waters\WebChatApi\Msg\WxMsgLocation;
-use Waters\WebChatApi\Msg\WxMsgScan;
-use Waters\WebChatApi\Msg\WxMsgSubscribe;
-use Waters\WebChatApi\Msg\WxMsgView;
-use Waters\WebChatApi\Msg\WxRespTextMessage;
+use Waters\WeiXin\Api\WeiXinApi;
+use Waters\WeiXin\Business\InterfaceMsgHandler;
+use Waters\WeiXin\Business\InterfaceWxApiForTP5;
+use Waters\WeiXin\Msg\WxMsgClick;
+use Waters\WeiXin\Msg\WxMsgLocation;
+use Waters\WeiXin\Msg\WxMsgScan;
+use Waters\WeiXin\Msg\WxMsgSubscribe;
+use Waters\WeiXin\Msg\WxMsgView;
+use Waters\WeiXin\Msg\WxRespTextMessage;
 
 class InterfaceMsg implements InterfaceMsgHandler
 {
@@ -26,10 +26,10 @@ class InterfaceMsg implements InterfaceMsgHandler
      * 用户关注时、未关注用户扫码带参数二维码进行关注时事件推送
      * @param WxMsgSubscribe $msg
      * @return null|WxRespTextMessage
-     * @throws \Waters\WebChatApi\Exception\WeiXinException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
+     * @throws \Exception
      */
     public function subscribe(WxMsgSubscribe $msg)
     {

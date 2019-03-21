@@ -11,7 +11,7 @@ return array(
     'think\\' => array($vendorDir . '/topthink/think-image/src'),
     'mindplay\\annotations\\' => array($vendorDir . '/mindplay/annotations/src/annotations'),
     'Workerman\\' => array($vendorDir . '/workerman/workerman-for-win'),
-    'Waters\\WebChatApi\\' => array($vendorDir . '/waters/webchatapi/src'),
+    'Waters\\WeiXin\\' => array($vendorDir . '/waters/wechatapi/src'),
     'Qiniu\\' => array($vendorDir . '/qiniu/php-sdk/src/Qiniu'),
     'GatewayWorker\\' => array($vendorDir . '/workerman/gateway-worker-for-win/src'),
     'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
