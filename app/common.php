@@ -515,6 +515,34 @@ function save_tmp_img($file_name,$type,$special_path = '',&$three_party_upload_s
     return false;
 }
 
+/**
+ * 发送阿里云短信
+ * 可参考/app/entry/controller/SampleController.php 的new_version
+ * 旧版请参考 /app/entry/controller/SampleController.php 的old_version
+ * @Author   YHX
+ * @DateTime 2019-06-04T15:15:11+0800
+ * @param    [type]                   $phone       [手机号]
+ * @param    [type]                   $templete_id [模板id]
+ * @param    [type]                   $data        [短信内容(数组)]
+ * @return   [type]                                [description]
+ */
+function send_aliyun_sms($phone,$templete_id,$data){
+
+    vendor('ALiYunSMS20170525.index');
+    $sms_sender = new \SMSSender(config('sms_config.access_key_id'),config('sms_config.access_key_secret'));
+    $rs = $sms_sender->sendSms(config('sms_config.sign_name'),$templete_id,$phone,$data);
+    if (isset($rs->Code) && $rs->Code === 'OK'){
+        /*发送成功执行发送后的逻辑*/
+
+        // $this->success('success');
+        return true;
+    }else{
+        add_log("短信发送失败,tel:{$tel},Code:{$rs->Code},Message:{$rs->Message},RequestId:{$rs->RequestId},BizId:{$rs->BizId}");
+        // throw_my_exception('短信业务繁忙,请稍后再试',null,self::CODE_BUSINESS_ERROR);
+        return false;
+    }
+}
+
 
 
 /*----------------------------------------------------------业务函数end-----------------------------------------------------------------------*/
