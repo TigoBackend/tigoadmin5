@@ -15,13 +15,8 @@
 				<div class="tabbable">
 					<div class="tab-content">
 						<div class="tab-pane active" id="A">
-							<div class="form-group">
-								<label for="input-site-name" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('WEBSITE_NAME')}</label>
-								<div class="col-md-6 col-sm-10">
-									<input type="text" class="form-control" id="input-site-name" name="options[site_name]" value="{$site_name|default=''}">
-								</div>
-							</div>
-							<div class="form-group">
+
+							<!-- <div class="form-group">
 								<label for="input-admin_url_password" class="col-sm-2 control-label">后台加密码</label>
 								<div class="col-md-6 col-sm-10">
 									<input type="text" class="form-control" id="input-admin_url_password" name="admin_settings[admin_password]" value="{$admin_settings.admin_password|default=''}" id="js-site-admin-url-password">
@@ -37,7 +32,7 @@
 										<p class="help-block">后台登录地址：<span id="js-site-admin-url">{:$site_domain}/{$admin_settings.admin_password}</span></p>
 									</if>
 								</div>
-							</div>
+							</div> -->
 							<!--
 							<div class="form-group">
 								<label for="input-mobile_tpl_enabled" class="col-sm-2 control-label">{:lang('ENABLE_MOBILE_THEME')}</label>
@@ -49,7 +44,7 @@
 								</div>
 							</div>
 							-->
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label for="input-site_adminstyle" class="col-sm-2 control-label">{:lang('WEBSITE_ADMIN_THEME')}</label>
 								<div class="col-md-6 col-sm-10">
 									<php>$site_admin_style=empty($admin_settings['admin_style'])?'':$admin_settings['admin_style'];</php>
@@ -60,7 +55,7 @@
 										</foreach>
 									</select>
 								</div>
-							</div>
+							</div> -->
 							<!--
 							<div class="form-group">
 								<label for="input-html_cache_on" class="col-sm-2 control-label">{:lang('HTML_CACHE')}</label>
@@ -73,23 +68,53 @@
 							</div>
 							-->
 							<div class="form-group">
-								<label for="input-site_icp" class="col-sm-2 control-label">{:lang('WEBSITE_ICP')}</label>
+								<label for="input-site-name" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('WEBSITE_NAME')}(中文)</label>
+								<div class="col-md-6 col-sm-10">
+									<input type="text" class="form-control" id="input-site-name" name="options[site_name]" value="{$site_name|default=''}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input-site-name" class="col-sm-2 control-label"><span class="form-required">*</span>{:lang('WEBSITE_NAME')}(英文)</label>
+								<div class="col-md-6 col-sm-10">
+									<input type="text" class="form-control" id="input-site-name" name="options[site_name_en]" value="{$site_name_en|default=''}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input-site_icp" class="col-sm-2 control-label">{:lang('WEBSITE_ICP')}(中文)</label>
 								<div class="col-md-6 col-sm-10">
 									<input type="text" class="form-control" id="input-site_icp" name="options[site_icp]" value="{$site_icp|default=''}">
 								</div>
 							</div>
 							<div class="form-group">
+								<label for="input-site_icp" class="col-sm-2 control-label">{:lang('WEBSITE_ICP')}(英文)</label>
+								<div class="col-md-6 col-sm-10">
+									<input type="text" class="form-control" id="input-site_icp_en" name="options[site_icp_en]" value="{$site_icp_en|default=''}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input-site_copyright" class="col-sm-2 control-label">版权(中文)</label>
+								<div class="col-md-6 col-sm-10">
+									<input type="text" class="form-control" id="input-site_copyright" name="options[site_copyright]" value="{$site_copyright|default=''}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input-site_copyright" class="col-sm-2 control-label">版权(英文)</label>
+								<div class="col-md-6 col-sm-10">
+									<input type="text" class="form-control" id="input-site_copyright_en" name="options[site_copyright_en]" value="{$site_copyright_en|default=''}">
+								</div>
+							</div>
+							<!-- <div class="form-group">
 								<label for="input-site_admin_email" class="col-sm-2 control-label">{:lang('WEBMASTER_EMAIL')}</label>
 								<div class="col-md-6 col-sm-10">
 									<input type="text" class="form-control" id="input-site_admin_email" name="options[site_admin_email]" value="{$site_admin_email|default=''}">
 								</div>
-							</div>
-							<div class="form-group">
+							</div> -->
+							<!-- <div class="form-group">
 								<label for="input-site_analytics" class="col-sm-2 control-label">{:lang('WEBSITE_STATISTICAL_CODE')}</label>
 								<div class="col-md-6 col-sm-10">
 									<textarea class="form-control" id="input-site_analytics" name="options[site_analytics]">{$site_analytics|default=''}</textarea>
 								</div>
-							</div>
+							</div> -->
 							<!--<div class="form-group">-->
 								<!--<label for="input-site_copyright" class="col-sm-2 control-label">{:lang('WEBSITE_COPYRIGHT_INFOMATION')}</label>-->
 								<!--<div class="col-md-6 col-sm-10">-->
@@ -104,21 +129,39 @@
 						</div>
 						<div class="tab-pane" id="B">
 							<div class="form-group">
-								<label for="input-site_seo_title" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_TITLE')}</label>
+								<label for="input-site_seo_title" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_TITLE')}(中文)</label>
 								<div class="col-md-6 col-sm-10">
 									<input type="text" class="form-control" id="input-site_seo_title" name="options[site_seo_title]" value="{$site_seo_title|default=''}">
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="input-site_seo_keywords" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_KEYWORDS')}</label>
+								<label for="input-site_seo_title_en" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_TITLE')}(英文)</label>
+								<div class="col-md-6 col-sm-10">
+									<input type="text" class="form-control" id="input-site_seo_title_en" name="options[site_seo_title_en]" value="{$site_seo_title_en|default=''}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input-site_seo_keywords" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_KEYWORDS')}(中文)</label>
 								<div class="col-md-6 col-sm-10">
 									<input type="text" class="form-control" id="input-site_seo_keywords" name="options[site_seo_keywords]" value="{$site_seo_keywords|default=''}">
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="input-site_seo_description" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_DESCRIPTION')}</label>
+								<label for="input-site_seo_keywords_en" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_KEYWORDS')}(英文)</label>
+								<div class="col-md-6 col-sm-10">
+									<input type="text" class="form-control" id="input-site_seo_keywords_en" name="options[site_seo_keywords_en]" value="{$site_seo_keywords_en|default=''}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input-site_seo_description" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_DESCRIPTION')}(中文)</label>
 								<div class="col-md-6 col-sm-10">
 									<textarea class="form-control" id="input-site_seo_description" name="options[site_seo_description]">{$site_seo_description|default=''}</textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="input-site_seo_description_en" class="col-sm-2 control-label">{:lang('WEBSITE_SEO_DESCRIPTION')}(英文)</label>
+								<div class="col-md-6 col-sm-10">
+									<textarea class="form-control" id="input-site_seo_description_en" name="options[site_seo_description_en]">{$site_seo_description_en|default=''}</textarea>
 								</div>
 							</div>
 							<div class="form-group">

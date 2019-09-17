@@ -5,7 +5,7 @@
  * Date: 2017/10/27
  * Time: 16:11
  */
-
+use think\Db;
 
 /*----------------------------------------------------------异常处理函数start-----------------------------------------------------------------------*/
 /**
@@ -541,6 +541,17 @@ function send_aliyun_sms($phone,$templete_id,$data){
         // throw_my_exception('短信业务繁忙,请稍后再试',null,self::CODE_BUSINESS_ERROR);
         return false;
     }
+}
+
+/**
+ * 获取最多人搜索的关键词
+ * @Author   YHX
+ * @DateTime 2019-09-17T17:41:43+0800
+ * @return   [type]                   [description]
+ */
+function get_search_keywords(){
+    $result = Db::name('search_keywords')->field('sk_id,keywords')->order('nums DESC')->limit(10)->select()->toArray();
+    return $result;
 }
 
 
